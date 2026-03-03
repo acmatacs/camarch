@@ -6,6 +6,56 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Seeding database...");
 
+  // ─── Permissions (developer-defined, never changed by admins) ──────────────
+  const permissionDefs = [
+    { action: "admin:access",    module: "admin",   description: "Access the admin panel" },
+    { action: "temples:read",    module: "temples",  description: "View temple records" },
+    { action: "temples:write",   module: "temples",  description: "Create and edit temples" },
+    { action: "temples:delete",  module: "temples",  description: "Delete temple records" },
+    { action: "users:manage",    module: "users",    description: "Create, edit and activate/deactivate admin users" },
+    { action: "roles:manage",    module: "roles",    description: "Create and assign roles" },
+    { action: "audit:read",      module: "audit",    description: "View the audit trail" },
+  ];
+
+  const permissions: Record<string, { id: number }> = {};
+  for (const def of permissionDefs) {
+    const p = await prisma.permission.upsert({
+      where: { action: def.action },
+      update: { module: def.module, description: def.description },
+      create: def,
+    });
+    permissions[def.action] = p;
+  }
+  console.log("✅ Permissions seeded");
+
+  // ─── Roles ──────────────────────────────────────────────────────────────────
+  const roleMap: Record<string, string[]> = {
+    "System Admin":      Object.keys(permissions),                                      // all
+    "Heritage Manager":  ["admin:access", "temples:read", "temples:write", "audit:read"],
+    "Field Staff":       ["admin:access", "temples:read", "temples:write"],
+  };
+
+  const roles: Record<string, { id: number }> = {};
+  for (const [name, actions] of Object.entries(roleMap)) {
+    const r = await prisma.adminRole.upsert({
+      where: { name },
+      update: { isSystem: true },
+      create: { name, isSystem: true },
+    });
+    roles[name] = r;
+
+    // Sync permissions: set exactly the specified permissions
+    await prisma.rolePermission.deleteMany({ where: { roleId: r.id } });
+    await prisma.rolePermission.createMany({
+      data: actions.map((action) => ({
+        roleId: r.id,
+        permissionId: permissions[action].id,
+      })),
+      skipDuplicates: true,
+    });
+  }
+  console.log("✅ Roles seeded");
+
   // ─── Admin User ─────────────────────────────────────────────────────────────
   const adminEmail = process.env.ADMIN_EMAIL ?? "admin@camarch.com";
   const adminPassword = process.env.ADMIN_PASSWORD ?? "CamArch@3921";
@@ -13,12 +63,12 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: adminEmail },
-    update: { passwordHash, role: "ADMIN" },
+    update: { passwordHash, roleId: roles["System Admin"].id },
     create: {
       email: adminEmail,
       passwordHash,
       name: "CamArch Admin",
-      role: "ADMIN",
+      roleId: roles["System Admin"].id,
     },
   });
   console.log(`✅ Admin user seeded: ${adminEmail}`);

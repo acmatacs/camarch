@@ -11,19 +11,73 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
+enum ActionType {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGIN_FAILED
+  LOGOUT
+  EXPORT
+}
+
+model AuditLog {
+  id          String     @id @default(uuid())
+  action      ActionType
+  entityType  String?    // e.g. "Temple", "Province" — null for auth actions
+  entityId    String?    // String ID of the affected record
+  actorId     String?    // User ID — nullable for unauthenticated attempts
+  actorEmail  String?    // Captured email, survives user deletion
+  oldValues   Json?      // Record state BEFORE mutation (UPDATE / DELETE)
+  newValues   Json?      // Record state AFTER mutation (CREATE / UPDATE)
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime   @default(now())
+
+  // NO @updatedAt — audit logs are immutable append-only records
+  @@index([createdAt(sort: Desc)])
+  @@index([actorEmail])
+  @@index([entityType, entityId])
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
   passwordHash String
   name         String?
-  role         Role     @default(USER)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  isActive     Boolean    @default(true)
+  roleId       Int?
+  role         AdminRole? @relation(fields: [roleId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model AdminRole {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  description String?
+  isSystem    Boolean          @default(false)
+  users       User[]
+  permissions RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Permission {
+  id          Int              @id @default(autoincrement())
+  action      String           @unique  // e.g. "temples:write", "users:manage"
+  module      String           // e.g. "temples", "users", "roles", "audit"
+  description String?
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  role         AdminRole  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
 }
 
 model Province {
@@ -79,3 +133,4 @@ model Temple {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+

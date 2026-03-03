@@ -90,7 +90,7 @@ export default function AdminErasPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-charcoal/8 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-charcoal/8 shadow-sm overflow-x-auto">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-7 h-7 border-2 border-gold border-t-transparent rounded-full animate-spin" />

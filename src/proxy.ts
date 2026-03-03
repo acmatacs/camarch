@@ -21,13 +21,14 @@ export async function proxy(req: NextRequest) {
   if (token) {
     try {
       const { payload } = await jwtVerify(token, secret);
-      // Enforce ADMIN role
-      if (payload.role === "ADMIN") {
+      // Require admin:access permission
+      const permissions = (payload.permissions ?? []) as string[];
+      if (permissions.includes("admin:access")) {
         return NextResponse.next();
       }
-      // Authenticated but wrong role → 403
+      // Authenticated but missing permission → 403
       if (pathname.startsWith("/api/admin")) {
-        return NextResponse.json({ error: "Forbidden: ADMIN role required" }, { status: 403 });
+        return NextResponse.json({ error: "Forbidden: admin access required" }, { status: 403 });
       }
       return NextResponse.redirect(new URL("/admin/login", req.url));
     } catch {

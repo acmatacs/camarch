@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { setAuditContext } from "@/lib/audit-context";
 
 const ProvinceSchema = z.object({
   name: z.string().min(1, "Name is required").max(200),
@@ -23,6 +24,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
 export async function PUT(req: NextRequest, { params }: Params) {
   try {
+    await setAuditContext(req);
     const { id } = await params;
     const body = await req.json();
     const parsed = ProvinceSchema.safeParse(body);
@@ -44,8 +46,9 @@ export async function PUT(req: NextRequest, { params }: Params) {
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: Params) {
+export async function DELETE(req: NextRequest, { params }: Params) {
   try {
+    await setAuditContext(req);
     const { id } = await params;
     await prisma.province.delete({ where: { id: parseInt(id) } });
     return NextResponse.json({ success: true });

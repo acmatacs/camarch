@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
+import { prisma, logAuditEvent } from "@/lib/prisma";
 import { signAdminToken, COOKIE_NAME, COOKIE_MAX_AGE } from "@/lib/auth";
 
 // Simple in-memory brute-force guard
@@ -34,21 +34,46 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
-    // Look up user in DB
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || user.role !== "ADMIN") {
+    // Look up user with their role and permissions
+    const user = await prisma.user.findUnique({
+      where: { email },
+      include: {
+        role: {
+          include: {
+            permissions: { include: { permission: true } },
+          },
+        },
+      },
+    });
+
+    const permissions = user?.role?.permissions.map((rp) => rp.permission.action) ?? [];
+    if (!user || !permissions.includes("admin:access")) {
+      logAuditEvent({ action: "LOGIN_FAILED", actorEmail: email, ipAddress: ip, userAgent: req.headers.get("user-agent") });
       await new Promise((r) => setTimeout(r, 500));
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    }
+
+    // Block inactive accounts
+    if (!user.isActive) {
+      logAuditEvent({ action: "LOGIN_FAILED", actorEmail: email, ipAddress: ip, userAgent: req.headers.get("user-agent") });
+      return NextResponse.json({ error: "Your account has been deactivated. Contact a system administrator." }, { status: 403 });
     }
 
     // Verify password
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) {
+      logAuditEvent({ action: "LOGIN_FAILED", actorEmail: email, ipAddress: ip, userAgent: req.headers.get("user-agent") });
       await new Promise((r) => setTimeout(r, 500));
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const token = await signAdminToken({ userId: user.id, email: user.email, role: user.role });
+    const token = await signAdminToken({
+      userId: user.id,
+      email: user.email,
+      name: user.name ?? null,
+      roleName: user.role?.name ?? null,
+      permissions,
+    });
 
     const res = NextResponse.json({ ok: true, name: user.name ?? user.email });
     res.cookies.set(COOKIE_NAME, token, {
@@ -59,6 +84,7 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
+    logAuditEvent({ action: "LOGIN", actorId: String(user.id), actorEmail: user.email, ipAddress: ip, userAgent: req.headers.get("user-agent") });
     return res;
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
