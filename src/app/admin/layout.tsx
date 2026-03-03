@@ -8,6 +8,13 @@ const navItems = [
   { href: "/admin/temples", label: "Temples", icon: "🏛️" },
 ];
 
+const refItems = [
+  { href: "/admin/provinces", label: "Provinces", icon: "🗺️" },
+  { href: "/admin/kings", label: "Kings", icon: "👑" },
+  { href: "/admin/styles", label: "Styles", icon: "🎨" },
+  { href: "/admin/eras", label: "Eras", icon: "📅" },
+];
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -62,12 +69,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </Link>
               );
             })}
+            <div className="pt-3 pb-1">
+              <p className="px-3 font-body text-[9px] uppercase tracking-widest text-charcoal/30">Reference Data</p>
+            </div>
+            {refItems.map((item) => {
+              const isActive = pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg font-body text-sm transition-all duration-150 ${
+                    isActive
+                      ? "bg-jungle text-white font-medium"
+                      : "text-charcoal/60 hover:bg-charcoal/5 hover:text-charcoal"
+                  }`}
+                >
+                  <span>{item.icon}</span>
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </aside>
 
         {/* Mobile nav */}
-        <div className="md:hidden bg-white border-b border-charcoal/8 flex gap-1 px-4 py-2">
-          {navItems.map((item) => {
+        <div className="md:hidden bg-white border-b border-charcoal/8 flex gap-1 px-4 py-2 overflow-x-auto">
+          {[...navItems, ...refItems].map((item) => {
             const isActive = item.href === "/admin"
               ? pathname === "/admin"
               : pathname.startsWith(item.href);
@@ -75,7 +102,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-body text-xs transition-all duration-150 ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-body text-xs transition-all duration-150 whitespace-nowrap ${
                   isActive ? "bg-jungle text-white" : "text-charcoal/60 hover:bg-charcoal/5"
                 }`}
               >
