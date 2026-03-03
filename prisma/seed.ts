@@ -284,8 +284,8 @@ async function main() {
   await prisma.temple.upsert({
     where: { slug: "bayon" },
     update: {
-      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG/1280px-Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
-      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG/1280px-Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG"],
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG"],
     },
     create: {
       slug: "bayon",
@@ -300,9 +300,9 @@ async function main() {
       yearBuilt: 1190,
       religion: "Buddhist (Mahayana)",
       featuredImage:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG/1280px-Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
       galleryImages: [
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG/1280px-Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman7.id,
@@ -315,8 +315,8 @@ async function main() {
   await prisma.temple.upsert({
     where: { slug: "ta-prohm" },
     update: {
-      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Ta_Prohm_%28III%29.jpg/1280px-Ta_Prohm_%28III%29.jpg",
-      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Ta_Prohm_%28III%29.jpg/1280px-Ta_Prohm_%28III%29.jpg"],
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/8/8c/Ta_Prohm_%28III%29.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/8/8c/Ta_Prohm_%28III%29.jpg"],
     },
     create: {
       slug: "ta-prohm",
@@ -331,9 +331,9 @@ async function main() {
       yearBuilt: 1186,
       religion: "Buddhist (Mahayana)",
       featuredImage:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Ta_Prohm_%28III%29.jpg/1280px-Ta_Prohm_%28III%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/8/8c/Ta_Prohm_%28III%29.jpg",
       galleryImages: [
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Ta_Prohm_%28III%29.jpg/1280px-Ta_Prohm_%28III%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/8/8c/Ta_Prohm_%28III%29.jpg",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman7.id,

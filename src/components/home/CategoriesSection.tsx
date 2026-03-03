@@ -17,7 +17,7 @@ const categories = [
     description:
       "Forgotten sanctuaries swallowed by centuries of jungle growth, waiting to be rediscovered.",
     href: "/temples?province=Preah+Vihear",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Ta_Prohm_%28III%29.jpg/1280px-Ta_Prohm_%28III%29.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/8/8c/Ta_Prohm_%28III%29.jpg",
     count: "40+ sites",
     badge: "Off-the-beaten-path",
     color: "from-[#1A1C1E]/80",
@@ -27,7 +27,7 @@ const categories = [
     description:
       "Monuments of the Khmer golden age — the 9th to 15th century empire at its zenith.",
     href: "/temples?era=Angkorian",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG/1280px-Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
+    image: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Bayon%2C_Angkor_Thom%2C_Camboya%2C_2013-08-17%2C_DD_37.JPG",
     count: "9th–15th century",
     badge: "Angkorian",
     color: "from-[#3a2500]/80",
