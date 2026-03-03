@@ -7,19 +7,10 @@ import QuickFactsPanel from "@/components/temples/QuickFactsPanel";
 import NearbyTemples from "@/components/temples/NearbyTemples";
 import Link from "next/link";
 
-// ─── Static params for build-time SSG ─────────────────────────────────────────
-// Falls back to an empty list if the DB is unreachable at build time (e.g. Vercel CI).
-// dynamicParams = true ensures pages are still rendered on-demand in that case.
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  try {
-    const temples = await prisma.temple.findMany({ select: { slug: true } });
-    return temples.map((t: { slug: string }) => ({ slug: t.slug }));
-  } catch {
-    return [];
-  }
-}
+// ─── Force SSR — no build-time DB calls ───────────────────────────────────────
+// Supabase Transaction Pooler (PgBouncer) doesn't support Prisma prepared
+// statements during build. Pages render on-demand per request instead.
+export const dynamic = "force-dynamic";
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
 export async function generateMetadata({
