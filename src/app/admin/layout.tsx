@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <button
             onClick={handleLogout}
-            className="font-body text-xs text-sandstone/40 hover:text-red-400 transition-colors"
+            className="font-body text-xs text-sandstone/70 hover:text-red-400 transition-colors flex items-center gap-1"
           >
             Sign Out
           </button>
@@ -48,8 +48,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-48 shrink-0 bg-white border-r border-charcoal/8 shadow-sm hidden md:block">
-          <nav className="p-4 space-y-1">
+        <aside className="w-48 shrink-0 bg-white border-r border-charcoal/8 shadow-sm hidden md:flex md:flex-col">
+          <nav className="p-4 space-y-1 flex-1">
             {navItems.map((item) => {
               const isActive = item.href === "/admin"
                 ? pathname === "/admin"
@@ -90,6 +90,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               );
             })}
           </nav>
+          <div className="p-4 border-t border-charcoal/8">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg font-body text-sm text-charcoal/50 hover:bg-red-50 hover:text-red-500 transition-all duration-150"
+            >
+              <span>🚪</span>
+              Sign Out
+            </button>
+          </div>
         </aside>
 
         {/* Mobile nav */}
