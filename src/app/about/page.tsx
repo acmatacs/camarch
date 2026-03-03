@@ -48,19 +48,19 @@ export default function AboutPage() {
 
       {/* ─── Developer Profile ───────────────────────────────────────────── */}
       <section className="bg-white border-b border-charcoal/8">
-        <div className="section-wrapper py-10">
-          <div className="flex items-center gap-5">
-            <div className="w-14 h-14 rounded-full overflow-hidden border border-charcoal/10 shadow-sm shrink-0">
+        <div className="section-wrapper py-12">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-8">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-charcoal/10 shadow-md shrink-0">
               <Image
                 src="/acmatac.jpg"
                 alt="Acmatac Seing"
-                width={56}
-                height={56}
+                width={128}
+                height={128}
                 className="object-cover w-full h-full"
               />
             </div>
-            <div>
-              <p className="font-heading text-base text-charcoal">Acmatac Seing</p>
+            <div className="text-center sm:text-left">
+              <p className="font-heading text-2xl text-charcoal mb-1">Acmatac Seing</p>
               <p className="font-body text-sm text-charcoal/50">
                 Designed &amp; developed by Acmatac Seing in collaboration with AI.
               </p>
