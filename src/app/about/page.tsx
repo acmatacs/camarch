@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "About — CamArch",
@@ -17,12 +18,6 @@ const timeline = [
   { year: "1992", label: "UNESCO World Heritage", note: "Angkor is inscribed on the World Heritage List" },
 ];
 
-const team = [
-  { name: "Archaeology Team", role: "Historical research & data accuracy", icon: "🏛️" },
-  { name: "Digital Team", role: "Platform development & UX design", icon: "💻" },
-  { name: "Photography Team", role: "On-site documentation & imagery", icon: "📷" },
-  { name: "Conservation Partners", role: "UNESCO, EFEO, national authorities", icon: "🤝" },
-];
 
 export default function AboutPage() {
   return (
@@ -124,9 +119,9 @@ export default function AboutPage() {
         <div className="section-wrapper py-14 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { num: "1,000+", label: "Years of history" },
-            { num: "5", label: "Temples catalogued" },
-            { num: "2", label: "Provinces covered" },
-            { num: "4", label: "Architectural styles" },
+            { num: "20", label: "Temples catalogued" },
+            { num: "4", label: "Provinces covered" },
+            { num: "9", label: "Architectural styles" },
           ].map((s) => (
             <div key={s.label}>
               <p className="font-heading text-3xl md:text-4xl text-gold mb-1">{s.num}</p>
@@ -136,27 +131,42 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ─── Team ────────────────────────────────────────────────────────── */}
+      {/* ─── Built by ─────────────────────────────────────────────────────── */}
       <section className="section-wrapper py-20">
         <span className="block font-body text-xs text-gold uppercase tracking-widest text-center mb-3">
-          Who We Are
+          The Creator
         </span>
-        <h2 className="font-heading text-3xl md:text-4xl text-charcoal text-center mb-12">
-          The Team Behind CamArch
+        <h2 className="font-heading text-3xl md:text-4xl text-charcoal text-center mb-14">
+          Built by Human &amp; AI
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-          {team.map((member) => (
-            <div
-              key={member.name}
-              className="bg-white rounded-xl border border-charcoal/8 shadow-sm p-6 text-center hover:shadow-md transition-shadow duration-200"
-            >
-              <div className="text-4xl mb-3">{member.icon}</div>
-              <h3 className="font-heading text-sm font-semibold text-charcoal mb-1">
-                {member.name}
-              </h3>
-              <p className="font-body text-xs text-charcoal/50">{member.role}</p>
+
+        <div className="max-w-2xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 bg-white rounded-2xl border border-charcoal/8 shadow-sm p-8">
+            <div className="shrink-0">
+              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-charcoal/8 shadow-md">
+                <Image
+                  src="/acmatac.jpg"
+                  alt="Acmatac Seing"
+                  width={112}
+                  height={112}
+                  className="object-cover w-full h-full"
+                />
+              </div>
             </div>
-          ))}
+            <div className="flex-1 text-center sm:text-left">
+              <p className="font-body text-xs text-gold uppercase tracking-widest mb-2">Developer</p>
+              <h3 className="font-heading text-2xl text-charcoal mb-1">Acmatac Seing</h3>
+              <p className="font-body text-sm text-charcoal/50 mb-4">Cambodian developer passionate about heritage, history, and technology.</p>
+              <div className="inline-flex items-center gap-2 bg-charcoal/4 rounded-full px-4 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-jungle"></span>
+                <span className="font-body text-xs text-charcoal/70">Developed by Acmatac &amp; AI</span>
+              </div>
+            </div>
+          </div>
+          <p className="font-body text-xs text-charcoal/35 text-center mt-6 leading-relaxed">
+            This platform was designed and built in collaboration with AI — combining human vision
+            with machine-assisted development to bring CamArch to life.
+          </p>
         </div>
       </section>
 
