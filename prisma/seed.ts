@@ -377,8 +377,8 @@ async function main() {
   await prisma.temple.upsert({
     where: { slug: "koh-ker" },
     update: {
-      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Koh_Ker_Prasat_Thom.jpg/1280px-Koh_Ker_Prasat_Thom.jpg",
-      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Koh_Ker_Prasat_Thom.jpg/1280px-Koh_Ker_Prasat_Thom.jpg"],
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/6/6d/0505280017PThompyramid.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/6/6d/0505280017PThompyramid.jpg"],
     },
     create: {
       slug: "koh-ker",
@@ -393,9 +393,9 @@ async function main() {
       yearBuilt: 921,
       religion: "Hindu (Shaivite)",
       featuredImage:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Koh_Ker_Prasat_Thom.jpg/1280px-Koh_Ker_Prasat_Thom.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/6/6d/0505280017PThompyramid.jpg",
       galleryImages: [
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Koh_Ker_Pyramid_Cambodia.jpg/1280px-Koh_Ker_Pyramid_Cambodia.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/2/2e/04-Koh_Ker-nX-1.jpg",
       ],
       provinceId: preahVihear.id,
       kingId: jayavarman4.id,
