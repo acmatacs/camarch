@@ -149,8 +149,8 @@ export function logAuditEvent(data: ManualAuditInput): void {
         actorEmail: data.actorEmail ?? null,
         ipAddress: data.ipAddress ?? null,
         userAgent: data.userAgent ?? null,
-        oldValues: data.oldValues ?? undefined,
-        newValues: data.newValues ?? undefined,
+        oldValues: data.oldValues != null ? (data.oldValues as Prisma.InputJsonValue) : undefined,
+        newValues: data.newValues != null ? (data.newValues as Prisma.InputJsonValue) : undefined,
       },
     })
     .catch((err: unknown) => console.error("[audit-event]", err));
