@@ -9,6 +9,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const from = searchParams.get("from") ?? "/admin";
 
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,14 +23,14 @@ function LoginForm() {
       const res = await fetch("/api/admin/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (res.ok) {
         router.replace(from);
       } else {
         const data = await res.json();
-        setError(data.error ?? "Invalid password");
+        setError(data.error ?? "Invalid credentials");
       }
     } catch {
       setError("Network error. Please try again.");
@@ -42,15 +43,29 @@ function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
         <label className="block font-body text-sm text-charcoal/70 mb-1.5">
-          Admin Password
+          Email
+        </label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoFocus
+          placeholder="admin@camarch.com"
+          className="w-full px-4 py-2.5 rounded-lg border border-charcoal/20 font-body text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-jungle/40 focus:border-jungle transition"
+        />
+      </div>
+
+      <div>
+        <label className="block font-body text-sm text-charcoal/70 mb-1.5">
+          Password
         </label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoFocus
-          placeholder="Enter admin password"
+          placeholder="Enter your password"
           className="w-full px-4 py-2.5 rounded-lg border border-charcoal/20 font-body text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-jungle/40 focus:border-jungle transition"
         />
       </div>

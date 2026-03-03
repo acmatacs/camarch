@@ -1,9 +1,27 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log("🌱 Seeding database...");
+
+  // ─── Admin User ─────────────────────────────────────────────────────────────
+  const adminEmail = process.env.ADMIN_EMAIL ?? "admin@camarch.com";
+  const adminPassword = process.env.ADMIN_PASSWORD ?? "CamArch@3921";
+  const passwordHash = await bcrypt.hash(adminPassword, 12);
+
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: { passwordHash, role: "ADMIN" },
+    create: {
+      email: adminEmail,
+      passwordHash,
+      name: "CamArch Admin",
+      role: "ADMIN",
+    },
+  });
+  console.log(`✅ Admin user seeded: ${adminEmail}`);
 
   // ─── Eras ───────────────────────────────────────────────────────────────────
   const angkorian = await prisma.era.upsert({

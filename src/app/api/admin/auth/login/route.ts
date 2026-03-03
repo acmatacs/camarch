@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/prisma";
 import { signAdminToken, COOKIE_NAME, COOKIE_MAX_AGE } from "@/lib/auth";
 
-// Simple in-memory brute-force guard (resets on cold start — good enough for serverless)
+// Simple in-memory brute-force guard
 const attempts = new Map<string, { count: number; resetAt: number }>();
 const MAX_ATTEMPTS = 5;
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+const WINDOW_MS = 15 * 60 * 1000;
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
@@ -27,22 +29,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { password } = await req.json();
-
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    if (!adminPassword) {
-      return NextResponse.json({ error: "Admin not configured" }, { status: 500 });
+    const { email, password } = await req.json();
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
-    if (password !== adminPassword) {
-      // Constant-time-ish delay to slow brute force
+    // Look up user in DB
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user || user.role !== "ADMIN") {
       await new Promise((r) => setTimeout(r, 500));
-      return NextResponse.json({ error: "Invalid password" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const token = await signAdminToken();
+    // Verify password
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) {
+      await new Promise((r) => setTimeout(r, 500));
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    }
 
-    const res = NextResponse.json({ ok: true });
+    const token = await signAdminToken({ userId: user.id, email: user.email, role: user.role });
+
+    const res = NextResponse.json({ ok: true, name: user.name ?? user.email });
     res.cookies.set(COOKIE_NAME, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
