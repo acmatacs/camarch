@@ -89,17 +89,35 @@ function LoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-charcoal to-charcoal/80 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-charcoal px-8 py-6 text-center">
+    <div className="min-h-screen flex">
+      {/* Left decorative panel */}
+      <div className="hidden lg:flex lg:w-1/2 bg-charcoal flex-col justify-between p-12">
+        <div>
           <span className="font-heading text-gold text-2xl tracking-wide">CamArch</span>
-          <p className="font-body text-sandstone/50 text-xs mt-1 uppercase tracking-widest">Admin Portal</p>
+          <p className="font-body text-sandstone/40 text-xs mt-1 uppercase tracking-widest">Cambodian Archaeology</p>
+        </div>
+        <div>
+          <blockquote className="font-heading text-sandstone/70 text-2xl leading-relaxed mb-4">
+            &ldquo;Preserving the legacy of the Khmer Empire.&rdquo;
+          </blockquote>
+          <p className="font-body text-sandstone/30 text-sm">Admin Portal — Authorised Access Only</p>
+        </div>
+        <div className="font-body text-sandstone/20 text-xs">© {new Date().getFullYear()} CamArch</div>
+      </div>
+
+      {/* Right sign-in panel */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 bg-white">
+        {/* Mobile logo */}
+        <div className="lg:hidden mb-10 text-center">
+          <span className="font-heading text-charcoal text-2xl tracking-wide">CamArch</span>
+          <p className="font-body text-charcoal/40 text-xs mt-1 uppercase tracking-widest">Admin Portal</p>
         </div>
 
-        {/* Form */}
-        <div className="px-8 py-8">
-          <h1 className="font-heading text-charcoal text-xl mb-6">Sign In</h1>
+        <div className="w-full max-w-sm">
+          <div className="mb-8">
+            <h1 className="font-heading text-charcoal text-3xl mb-2">Welcome back</h1>
+            <p className="font-body text-charcoal/50 text-sm">Sign in to manage the CamArch database.</p>
+          </div>
           <Suspense>
             <LoginForm />
           </Suspense>
