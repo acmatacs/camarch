@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 type ActionType = "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "LOGIN_FAILED" | "LOGOUT" | "EXPORT";
 import { auditStore } from "@/lib/audit-context";
@@ -81,8 +81,8 @@ function buildExtension(base: PrismaClient) {
                 actorEmail: ctx?.actorEmail ?? null,
                 ipAddress: ctx?.ipAddress ?? null,
                 userAgent: ctx?.userAgent ?? null,
-                oldValues: oldValues ?? undefined,
-                newValues: newValues ?? undefined,
+                oldValues: oldValues != null ? (oldValues as Prisma.InputJsonValue) : undefined,
+                newValues: newValues != null ? (newValues as Prisma.InputJsonValue) : undefined,
               },
             })
             .catch((err: unknown) => console.error("[audit-extension]", err));
