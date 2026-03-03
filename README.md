@@ -4,11 +4,20 @@ A visually immersive, interactive web platform for discovering, searching, and e
 
 ## ✨ Features
 
+### Public
 * **Dynamic Discovery:** Explore a curated database of ancient Cambodian temples, from the iconic Angkor Wat to remote jungle ruins like Koh Ker.
 * **Advanced Filtering:** Search and filter sites by historical era (e.g., Angkorian), architectural style, ruling King, and modern-day province.
 * **Interactive Map:** A full-screen, custom-styled map built with Leaflet to visualize the geographical spread of the Khmer Empire's monuments.
 * **Rich Detail Pages:** Immersive temple profiles featuring high-resolution galleries, historical timelines, visitor information, and architectural facts.
 * **Modern & Fast:** Server-Side Rendered (SSR) with Next.js for blazing-fast performance and excellent SEO.
+
+### Admin CMS
+* **Salesforce Setup-style Admin Panel:** Sidebar with grouped sections, icons, real-time search, and a user info card footer.
+* **Role-Based Access Control (RBAC):** Dynamic roles and permissions system — System Admin, Heritage Manager, and Field Staff roles with granular per-permission enforcement at both the API and UI layer.
+* **User Management:** Create and manage admin accounts. Accounts can be activated or deactivated (no permanent deletion). Inactive accounts cannot log in.
+* **Roles & Permissions:** Salesforce PermissionSet-style roles editor — select a role on the left, toggle permissions grouped by module on the right.
+* **Audit Log:** Immutable, append-only log of all admin actions (create, update, delete, login, logout) with pagination, filtering by action type, entity, and actor.
+* **Temple & Reference Data Management:** Full CRUD for temples, provinces, kings, architectural styles, and historical eras.
 
 ## 🛠️ Tech Stack
 
@@ -48,8 +57,14 @@ npm install
 Create a `.env` file in the root directory and add your database connection string:
 
 ```env
-# Example using Supabase PostgreSQL connection string
+# Supabase pooled connection string (runtime queries)
 DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-SUPABASE-REF].supabase.co:5432/postgres"
+
+# Supabase direct connection string (migrations)
+DIRECT_URL="postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-SUPABASE-REF].supabase.co:5432/postgres"
+
+# Secret key for signing admin JWTs (min 32 characters recommended)
+JWT_SECRET="your-secret-key-here"
 ```
 
 ### 4. Setup the Database
@@ -84,6 +99,14 @@ The relational database is structured around the `Temple` entity, which is linke
 * **Provinces:** Modern geographical location (e.g., Siem Reap).
 * **Styles:** Architectural style (e.g., Bayon style).
 * **Eras:** Broad historical timeline (e.g., Angkorian).
+
+The admin system adds:
+
+* **AdminRole:** Named roles (System Admin, Heritage Manager, Field Staff) — fully dynamic and editable.
+* **Permission:** Granular capabilities (e.g., `temples:write`, `users:manage`, `audit:read`).
+* **RolePermission:** Join table linking roles to permissions.
+* **User:** Admin accounts with `isActive` (activate/deactivate support), linked to an `AdminRole`.
+* **AuditLog:** Append-only log of all admin operations, recording actor, action type, entity, before/after values, IP, and timestamp.
 
 ## 📄 License
 
