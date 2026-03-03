@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PublicWrapper from "@/components/layout/PublicWrapper";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://camarch.vercel.app";
 
@@ -87,9 +86,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col bg-sandstone text-charcoal antialiased">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <PublicWrapper>{children}</PublicWrapper>
       </body>
     </html>
   );

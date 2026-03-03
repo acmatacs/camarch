@@ -4,15 +4,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 const navItems = [
-  { href: "/admin", label: "Dashboard", icon: "📊" },
-  { href: "/admin/temples", label: "Temples", icon: "🏛️" },
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/temples", label: "Temples" },
 ];
 
 const refItems = [
-  { href: "/admin/provinces", label: "Provinces", icon: "🗺️" },
-  { href: "/admin/kings", label: "Kings", icon: "👑" },
-  { href: "/admin/styles", label: "Styles", icon: "🎨" },
-  { href: "/admin/eras", label: "Eras", icon: "📅" },
+  { href: "/admin/provinces", label: "Provinces" },
+  { href: "/admin/kings", label: "Kings" },
+  { href: "/admin/styles", label: "Styles" },
+  { href: "/admin/eras", label: "Eras" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -64,7 +64,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       : "text-charcoal/60 hover:bg-charcoal/5 hover:text-charcoal"
                   }`}
                 >
-                  <span>{item.icon}</span>
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? "bg-white" : "bg-charcoal/20"}`} />
                   {item.label}
                 </Link>
               );
@@ -84,7 +84,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       : "text-charcoal/60 hover:bg-charcoal/5 hover:text-charcoal"
                   }`}
                 >
-                  <span>{item.icon}</span>
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? "bg-white" : "bg-charcoal/20"}`} />
                   {item.label}
                 </Link>
               );
@@ -92,10 +92,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
           <div className="p-4 border-t border-charcoal/8">
             <button
+              type="button"
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg font-body text-sm text-charcoal/50 hover:bg-red-50 hover:text-red-500 transition-all duration-150"
+              className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg font-body text-sm text-red-400 hover:bg-red-50 hover:text-red-600 transition-all duration-150 border border-red-100 hover:border-red-200"
             >
-              <span>🚪</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+              </svg>
               Sign Out
             </button>
           </div>
@@ -111,11 +114,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-body text-xs transition-all duration-150 whitespace-nowrap ${
+                className={`px-3 py-2 rounded-lg font-body text-xs transition-all duration-150 whitespace-nowrap ${
                   isActive ? "bg-jungle text-white" : "text-charcoal/60 hover:bg-charcoal/5"
                 }`}
               >
-                <span>{item.icon}</span>
                 {item.label}
               </Link>
             );
