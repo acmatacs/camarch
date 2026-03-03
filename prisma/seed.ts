@@ -251,7 +251,10 @@ async function main() {
   // 1. Angkor Wat
   await prisma.temple.upsert({
     where: { slug: "angkor-wat" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Angkor_Wat_temple.jpg/1280px-Angkor_Wat_temple.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Angkor_Wat_temple.jpg/1280px-Angkor_Wat_temple.jpg"],
+    },
     create: {
       slug: "angkor-wat",
       name: "Angkor Wat",
@@ -280,7 +283,10 @@ async function main() {
   // 2. Bayon
   await prisma.temple.upsert({
     where: { slug: "bayon" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Bayon_temple%2C_Angkor_Thom.jpg/1280px-Bayon_temple%2C_Angkor_Thom.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Bayon_temple%2C_Angkor_Thom.jpg/1280px-Bayon_temple%2C_Angkor_Thom.jpg"],
+    },
     create: {
       slug: "bayon",
       name: "Bayon",
@@ -308,7 +314,10 @@ async function main() {
   // 3. Ta Prohm
   await prisma.temple.upsert({
     where: { slug: "ta-prohm" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Ta_Prohm_Angkor_1.jpg/1280px-Ta_Prohm_Angkor_1.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Ta_Prohm_Angkor_1.jpg/1280px-Ta_Prohm_Angkor_1.jpg"],
+    },
     create: {
       slug: "ta-prohm",
       name: "Ta Prohm",
@@ -336,7 +345,10 @@ async function main() {
   // 4. Banteay Srei
   await prisma.temple.upsert({
     where: { slug: "banteay-srei" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Banteay_Srei_temple_view.jpg/1280px-Banteay_Srei_temple_view.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Banteay_Srei_temple_view.jpg/1280px-Banteay_Srei_temple_view.jpg"],
+    },
     create: {
       slug: "banteay-srei",
       name: "Banteay Srei",
@@ -364,7 +376,10 @@ async function main() {
   // 5. Koh Ker
   await prisma.temple.upsert({
     where: { slug: "koh-ker" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Koh_Ker_Prasat_Thom.jpg/1280px-Koh_Ker_Prasat_Thom.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Koh_Ker_Prasat_Thom.jpg/1280px-Koh_Ker_Prasat_Thom.jpg"],
+    },
     create: {
       slug: "koh-ker",
       name: "Koh Ker",
@@ -394,7 +409,10 @@ async function main() {
   // 6. Preah Khan
   await prisma.temple.upsert({
     where: { slug: "preah-khan" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG/1280px-Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG/1280px-Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG"],
+    },
     create: {
       slug: "preah-khan",
       name: "Preah Khan",
@@ -407,10 +425,9 @@ async function main() {
       longitude: 103.8567,
       yearBuilt: 1191,
       religion: "Buddhist (Mahayana)",
-      featuredImage: "https://picsum.photos/seed/preah-khan/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG/1280px-Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG",
       galleryImages: [
-        "https://picsum.photos/seed/preah-khan-2/1200/800",
-        "https://picsum.photos/seed/preah-khan-3/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG/1280px-Preah_Khan%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_26.JPG",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman7.id,
@@ -422,7 +439,10 @@ async function main() {
   // 7. Neak Pean
   await prisma.temple.upsert({
     where: { slug: "neak-pean" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Neakpeancentralpond2014.jpg/1280px-Neakpeancentralpond2014.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Neakpeancentralpond2014.jpg/1280px-Neakpeancentralpond2014.jpg"],
+    },
     create: {
       slug: "neak-pean",
       name: "Neak Pean",
@@ -435,9 +455,9 @@ async function main() {
       longitude: 103.8683,
       yearBuilt: 1190,
       religion: "Buddhist (Mahayana)",
-      featuredImage: "https://picsum.photos/seed/neak-pean/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Neakpeancentralpond2014.jpg/1280px-Neakpeancentralpond2014.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/neak-pean-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Neakpeancentralpond2014.jpg/1280px-Neakpeancentralpond2014.jpg",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman7.id,
@@ -449,7 +469,10 @@ async function main() {
   // 8. Ta Som
   await prisma.temple.upsert({
     where: { slug: "ta-som" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Gopura_du_temple_Ta_Som_%28Angkor%29_%286973281033%29.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/f/f1/Gopura_du_temple_Ta_Som_%28Angkor%29_%286973281033%29.jpg"],
+    },
     create: {
       slug: "ta-som",
       name: "Ta Som",
@@ -462,9 +485,9 @@ async function main() {
       longitude: 103.882,
       yearBuilt: 1190,
       religion: "Buddhist (Mahayana)",
-      featuredImage: "https://picsum.photos/seed/ta-som/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Gopura_du_temple_Ta_Som_%28Angkor%29_%286973281033%29.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/ta-som-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/f/f1/Gopura_du_temple_Ta_Som_%28Angkor%29_%286973281033%29.jpg",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman7.id,
@@ -476,7 +499,10 @@ async function main() {
   // 9. Banteay Kdei
   await prisma.temple.upsert({
     where: { slug: "banteay-kdei" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG/1280px-Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG/1280px-Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG"],
+    },
     create: {
       slug: "banteay-kdei",
       name: "Banteay Kdei",
@@ -489,9 +515,9 @@ async function main() {
       longitude: 103.893,
       yearBuilt: 1190,
       religion: "Buddhist (Mahayana)",
-      featuredImage: "https://picsum.photos/seed/banteay-kdei/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG/1280px-Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG",
       galleryImages: [
-        "https://picsum.photos/seed/banteay-kdei-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG/1280px-Banteay_Kdei%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_10.JPG",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman7.id,
@@ -503,7 +529,10 @@ async function main() {
   // 10. Pre Rup
   await prisma.temple.upsert({
     where: { slug: "pre-rup" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG/1280px-Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG/1280px-Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG"],
+    },
     create: {
       slug: "pre-rup",
       name: "Pre Rup",
@@ -516,9 +545,9 @@ async function main() {
       longitude: 103.9,
       yearBuilt: 961,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/pre-rup/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG/1280px-Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG",
       galleryImages: [
-        "https://picsum.photos/seed/pre-rup-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG/1280px-Pre_Rup%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_13.JPG",
       ],
       provinceId: siemReap.id,
       kingId: rajendravarman.id,
@@ -530,7 +559,10 @@ async function main() {
   // 11. Phnom Bakheng
   await prisma.temple.upsert({
     where: { slug: "phnom-bakheng" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg/1280px-Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg/1280px-Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg"],
+    },
     create: {
       slug: "phnom-bakheng",
       name: "Phnom Bakheng",
@@ -543,9 +575,9 @@ async function main() {
       longitude: 103.8592,
       yearBuilt: 889,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/phnom-bakheng/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg/1280px-Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/phnom-bakheng-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg/1280px-Phnom_Bakheng_temple_at_Angkor%2C_Cambodia.jpg",
       ],
       provinceId: siemReap.id,
       kingId: yasovarman1.id,
@@ -557,7 +589,10 @@ async function main() {
   // 12. Ta Keo
   await prisma.temple.upsert({
     where: { slug: "ta-keo" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ta_Keo_Temple_%28I%29.jpg/1280px-Ta_Keo_Temple_%28I%29.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ta_Keo_Temple_%28I%29.jpg/1280px-Ta_Keo_Temple_%28I%29.jpg"],
+    },
     create: {
       slug: "ta-keo",
       name: "Ta Keo",
@@ -570,9 +605,9 @@ async function main() {
       longitude: 103.878,
       yearBuilt: 975,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/ta-keo/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ta_Keo_Temple_%28I%29.jpg/1280px-Ta_Keo_Temple_%28I%29.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/ta-keo-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ta_Keo_Temple_%28I%29.jpg/1280px-Ta_Keo_Temple_%28I%29.jpg",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman5.id,
@@ -584,7 +619,10 @@ async function main() {
   // 13. Lolei
   await prisma.temple.upsert({
     where: { slug: "lolei" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Lolei1.JPG/1280px-Lolei1.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Lolei1.JPG/1280px-Lolei1.JPG"],
+    },
     create: {
       slug: "lolei",
       name: "Lolei",
@@ -597,9 +635,9 @@ async function main() {
       longitude: 103.8541,
       yearBuilt: 893,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/lolei/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Lolei1.JPG/1280px-Lolei1.JPG",
       galleryImages: [
-        "https://picsum.photos/seed/lolei-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Lolei1.JPG/1280px-Lolei1.JPG",
       ],
       provinceId: siemReap.id,
       kingId: yasovarman1.id,
@@ -611,7 +649,10 @@ async function main() {
   // 14. Preah Ko
   await prisma.temple.upsert({
     where: { slug: "preah-ko" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Preah_Ko_1.jpg/1280px-Preah_Ko_1.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Preah_Ko_1.jpg/1280px-Preah_Ko_1.jpg"],
+    },
     create: {
       slug: "preah-ko",
       name: "Preah Ko",
@@ -624,9 +665,9 @@ async function main() {
       longitude: 103.855,
       yearBuilt: 879,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/preah-ko/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Preah_Ko_1.jpg/1280px-Preah_Ko_1.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/preah-ko-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Preah_Ko_1.jpg/1280px-Preah_Ko_1.jpg",
       ],
       provinceId: siemReap.id,
       kingId: indravarman1.id,
@@ -638,7 +679,10 @@ async function main() {
   // 15. Beng Mealea
   await prisma.temple.upsert({
     where: { slug: "beng-mealea" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bengmealea.jpg/1280px-Bengmealea.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bengmealea.jpg/1280px-Bengmealea.jpg"],
+    },
     create: {
       slug: "beng-mealea",
       name: "Beng Mealea",
@@ -651,10 +695,9 @@ async function main() {
       longitude: 104.2308,
       yearBuilt: 1115,
       religion: "Hindu (Vaishnavite)",
-      featuredImage: "https://picsum.photos/seed/beng-mealea/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bengmealea.jpg/1280px-Bengmealea.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/beng-mealea-2/1200/800",
-        "https://picsum.photos/seed/beng-mealea-3/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bengmealea.jpg/1280px-Bengmealea.jpg",
       ],
       provinceId: siemReap.id,
       kingId: suryavarman2.id,
@@ -666,7 +709,10 @@ async function main() {
   // 16. Prasat Preah Vihear
   await prisma.temple.upsert({
     where: { slug: "prasat-preah-vihear" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/03_Prasat_Preah_Vihear-nX-06532.jpg/1280px-03_Prasat_Preah_Vihear-nX-06532.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/03_Prasat_Preah_Vihear-nX-06532.jpg/1280px-03_Prasat_Preah_Vihear-nX-06532.jpg"],
+    },
     create: {
       slug: "prasat-preah-vihear",
       name: "Prasat Preah Vihear",
@@ -679,10 +725,9 @@ async function main() {
       longitude: 104.6806,
       yearBuilt: 1000,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/preah-vihear-temple/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/03_Prasat_Preah_Vihear-nX-06532.jpg/1280px-03_Prasat_Preah_Vihear-nX-06532.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/preah-vihear-2/1200/800",
-        "https://picsum.photos/seed/preah-vihear-3/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/03_Prasat_Preah_Vihear-nX-06532.jpg/1280px-03_Prasat_Preah_Vihear-nX-06532.jpg",
       ],
       provinceId: preahVihear.id,
       kingId: suryavarman1.id,
@@ -694,7 +739,10 @@ async function main() {
   // 17. Banteay Chhmar
   await prisma.temple.upsert({
     where: { slug: "banteay-chhmar" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Banteay_Chhmar_Temple_Entrance.JPG/1024px-Banteay_Chhmar_Temple_Entrance.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Banteay_Chhmar_Temple_Entrance.JPG/1024px-Banteay_Chhmar_Temple_Entrance.JPG"],
+    },
     create: {
       slug: "banteay-chhmar",
       name: "Banteay Chhmar",
@@ -707,9 +755,9 @@ async function main() {
       longitude: 103.0849,
       yearBuilt: 1195,
       religion: "Buddhist (Mahayana)",
-      featuredImage: "https://picsum.photos/seed/banteay-chhmar/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Banteay_Chhmar_Temple_Entrance.JPG/1024px-Banteay_Chhmar_Temple_Entrance.JPG",
       galleryImages: [
-        "https://picsum.photos/seed/banteay-chhmar-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Banteay_Chhmar_Temple_Entrance.JPG/1024px-Banteay_Chhmar_Temple_Entrance.JPG",
       ],
       provinceId: banteayMeanchey.id,
       kingId: jayavarman7.id,
@@ -721,7 +769,10 @@ async function main() {
   // 18. Sambor Prei Kuk
   await prisma.temple.upsert({
     where: { slug: "sambor-prei-kuk" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg/1280px-600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg/1280px-600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg"],
+    },
     create: {
       slug: "sambor-prei-kuk",
       name: "Sambor Prei Kuk",
@@ -734,10 +785,9 @@ async function main() {
       longitude: 104.9904,
       yearBuilt: 616,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/sambor-prei-kuk/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg/1280px-600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg",
       galleryImages: [
-        "https://picsum.photos/seed/sambor-prei-kuk-2/1200/800",
-        "https://picsum.photos/seed/sambor-prei-kuk-3/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg/1280px-600_CE_Ashram_Maha_Rishi_Hindu_temple%2C_N17_Kuk_Vihear_Prasat_Asram_Maha_Rusei%2C_Sambour_Kuk_Cambodia_01.jpg",
       ],
       provinceId: kampongThom.id,
       kingId: isanavarman1.id,
@@ -749,7 +799,10 @@ async function main() {
   // 19. Prasat Kravan
   await prisma.temple.upsert({
     where: { slug: "prasat-kravan" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG/1280px-Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG/1280px-Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG"],
+    },
     create: {
       slug: "prasat-kravan",
       name: "Prasat Kravan",
@@ -762,9 +815,9 @@ async function main() {
       longitude: 103.891,
       yearBuilt: 921,
       religion: "Hindu (Vaishnavite)",
-      featuredImage: "https://picsum.photos/seed/prasat-kravan/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG/1280px-Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG",
       galleryImages: [
-        "https://picsum.photos/seed/prasat-kravan-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG/1280px-Prasat_Kravan%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_05.JPG",
       ],
       provinceId: siemReap.id,
       kingId: jayavarman4.id,
@@ -776,7 +829,10 @@ async function main() {
   // 20. Eastern Mebon
   await prisma.temple.upsert({
     where: { slug: "eastern-mebon" },
-    update: {},
+    update: {
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG/1280px-Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG/1280px-Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG"],
+    },
     create: {
       slug: "eastern-mebon",
       name: "Eastern Mebon",
@@ -789,9 +845,9 @@ async function main() {
       longitude: 103.9,
       yearBuilt: 952,
       religion: "Hindu (Shaivite)",
-      featuredImage: "https://picsum.photos/seed/eastern-mebon/1200/800",
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG/1280px-Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG",
       galleryImages: [
-        "https://picsum.photos/seed/eastern-mebon-2/1200/800",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG/1280px-Mebon_Oriental%2C_Angkor%2C_Camboya%2C_2013-08-17%2C_DD_05.JPG",
       ],
       provinceId: siemReap.id,
       kingId: rajendravarman.id,

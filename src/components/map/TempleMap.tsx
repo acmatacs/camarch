@@ -7,6 +7,7 @@ import type { MapTemple } from "@/types";
 
 // Leaflet must be dynamically loaded client-side only
 import type { Map as LeafletMap } from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 interface TempleMapProps {
   temples: MapTemple[];
@@ -93,23 +94,6 @@ export default function TempleMap({ temples }: TempleMapProps) {
 
   return (
     <div className="relative w-full h-full">
-      {/* Leaflet CSS */}
-      <style>{`
-        @import url("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
-        .leaflet-tooltip-temple {
-          background: #1A1C1E;
-          color: #F7F5F0;
-          border: none;
-          border-radius: 6px;
-          font-family: Inter, sans-serif;
-          font-size: 12px;
-          padding: 4px 8px;
-          white-space: nowrap;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .leaflet-tooltip-temple::before { border-top-color: #1A1C1E; }
-      `}</style>
-
       {/* Map container */}
       <div ref={containerRef} className="w-full h-full" />
 
