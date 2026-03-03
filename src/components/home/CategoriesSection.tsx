@@ -7,7 +7,7 @@ const categories = [
     description:
       "The crown jewel of Khmer civilisation, spanning over 400 km² near Siem Reap.",
     href: "/temples?province=Siem+Reap",
-    image: "https://picsum.photos/seed/angkor-park/800/600",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/1280px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg",
     count: "100+ temples",
     badge: "UNESCO",
     color: "from-jungle/80",
@@ -17,7 +17,7 @@ const categories = [
     description:
       "Forgotten sanctuaries swallowed by centuries of jungle growth, waiting to be rediscovered.",
     href: "/temples?province=Preah+Vihear",
-    image: "https://picsum.photos/seed/jungle-temples/800/600",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Ta_Prohm_Angkor_1.jpg/1280px-Ta_Prohm_Angkor_1.jpg",
     count: "40+ sites",
     badge: "Off-the-beaten-path",
     color: "from-[#1A1C1E]/80",
@@ -27,7 +27,7 @@ const categories = [
     description:
       "Monuments of the Khmer golden age — the 9th to 15th century empire at its zenith.",
     href: "/temples?era=Angkorian",
-    image: "https://picsum.photos/seed/angkorian-era/800/600",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Bayon_temple%2C_Angkor_Thom.jpg/1280px-Bayon_temple%2C_Angkor_Thom.jpg",
     count: "9th–15th century",
     badge: "Angkorian",
     color: "from-[#3a2500]/80",
@@ -37,7 +37,7 @@ const categories = [
     description:
       "Dedicated to Shiva, Vishnu, and the Hindu cosmos — the spiritual roots of Khmer sovereignty.",
     href: "/temples?religion=Hindu",
-    image: "https://picsum.photos/seed/hindu-temples/800/600",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Banteay_Srei_full2.jpg/1280px-Banteay_Srei_full2.jpg",
     count: "50+ temples",
     badge: "Hindu",
     color: "from-[#4a1e00]/80",
@@ -47,7 +47,7 @@ const categories = [
     description:
       "Serene sanctuaries where Buddhism gradually transformed the great stone temples of Angkor.",
     href: "/temples?religion=Buddhist",
-    image: "https://picsum.photos/seed/buddhist-monuments/800/600",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Neakpeancentralpond2014.jpg/1280px-Neakpeancentralpond2014.jpg",
     count: "30+ temples",
     badge: "Buddhist",
     color: "from-jungle/80",
@@ -57,7 +57,7 @@ const categories = [
     description:
       "Internationally recognised sites of outstanding universal value to humanity.",
     href: "/temples?search=UNESCO",
-    image: "https://picsum.photos/seed/unesco-heritage/800/600",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/03_Prasat_Preah_Vihear-nX-06532.jpg/1280px-03_Prasat_Preah_Vihear-nX-06532.jpg",
     count: "3 sites",
     badge: "Heritage",
     color: "from-[#1A1C1E]/80",

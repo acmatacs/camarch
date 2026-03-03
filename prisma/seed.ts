@@ -252,8 +252,8 @@ async function main() {
   await prisma.temple.upsert({
     where: { slug: "angkor-wat" },
     update: {
-      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Angkor_Wat_temple.jpg/1280px-Angkor_Wat_temple.jpg",
-      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Angkor_Wat_temple.jpg/1280px-Angkor_Wat_temple.jpg"],
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/1280px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/1280px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg"],
     },
     create: {
       slug: "angkor-wat",
@@ -268,7 +268,7 @@ async function main() {
       yearBuilt: 1113,
       religion: "Hindu (later Buddhist)",
       featuredImage:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Angkor_Wat_temple.jpg/1280px-Angkor_Wat_temple.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/1280px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg",
       galleryImages: [
         "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Angkor_Wat%2C_Camboya%2C_2013-08-16%2C_DD_04.jpg/1280px-Angkor_Wat%2C_Camboya%2C_2013-08-16%2C_DD_04.jpg",
         "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Angkor_Wat_bas_relief.jpg/1280px-Angkor_Wat_bas_relief.jpg",
@@ -346,8 +346,8 @@ async function main() {
   await prisma.temple.upsert({
     where: { slug: "banteay-srei" },
     update: {
-      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Banteay_Srei_temple_view.jpg/1280px-Banteay_Srei_temple_view.jpg",
-      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Banteay_Srei_temple_view.jpg/1280px-Banteay_Srei_temple_view.jpg"],
+      featuredImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Banteay_Srei_full2.jpg/1280px-Banteay_Srei_full2.jpg",
+      galleryImages: ["https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Banteay_Srei_full2.jpg/1280px-Banteay_Srei_full2.jpg"],
     },
     create: {
       slug: "banteay-srei",
@@ -362,7 +362,7 @@ async function main() {
       yearBuilt: 967,
       religion: "Hindu (Shaivite)",
       featuredImage:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Banteay_Srei_temple_view.jpg/1280px-Banteay_Srei_temple_view.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Banteay_Srei_full2.jpg/1280px-Banteay_Srei_full2.jpg",
       galleryImages: [
         "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Banteay_Srei_closeup_carvings.jpg/1280px-Banteay_Srei_closeup_carvings.jpg",
       ],
