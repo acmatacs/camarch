@@ -117,13 +117,116 @@ async function main() {
   const kohKerStyle = await prisma.style.upsert({
     where: { name: "Koh Ker Style" },
     update: {},
-    create: {
-      name: "Koh Ker Style",
-      period: "Early 10th century",
-    },
+    create: { name: "Koh Ker Style", period: "Early 10th century" },
+  });
+  const preRupStyle = await prisma.style.upsert({
+    where: { name: "Pre Rup Style" },
+    update: {},
+    create: { name: "Pre Rup Style", period: "Mid 10th century" },
+  });
+  const bakhengStyle = await prisma.style.upsert({
+    where: { name: "Bakheng Style" },
+    update: {},
+    create: { name: "Bakheng Style", period: "Late 9th – early 10th century" },
+  });
+  const rolousStyle = await prisma.style.upsert({
+    where: { name: "Roluos Style" },
+    update: {},
+    create: { name: "Roluos Style", period: "Late 9th century" },
+  });
+  const preahKhanStyle = await prisma.style.upsert({
+    where: { name: "Preah Khan Style" },
+    update: {},
+    create: { name: "Preah Khan Style", period: "Late 12th – early 13th century" },
+  });
+  const samborStyle = await prisma.style.upsert({
+    where: { name: "Sambor Prei Kuk Style" },
+    update: {},
+    create: { name: "Sambor Prei Kuk Style", period: "7th century" },
   });
 
   console.log("✅ Styles seeded");
+
+  // ─── Additional Provinces ───────────────────────────────────────────────────
+  const kampongThom = await prisma.province.upsert({
+    where: { name: "Kampong Thom" },
+    update: {},
+    create: {
+      name: "Kampong Thom",
+      description:
+        "The geographic heart of Cambodia, Kampong Thom is home to the remarkable Pre-Angkorian ruins of Sambor Prei Kuk — one of the earliest large cities of Southeast Asia.",
+    },
+  });
+  const banteayMeanchey = await prisma.province.upsert({
+    where: { name: "Banteay Meanchey" },
+    update: {},
+    create: {
+      name: "Banteay Meanchey",
+      description:
+        "Located in northwestern Cambodia near the Thai border, Banteay Meanchey contains the spectacular but often overlooked temple fortress of Banteay Chhmar.",
+    },
+  });
+
+  console.log("✅ Additional provinces seeded");
+
+  // ─── Additional Kings ───────────────────────────────────────────────────────
+  const yasovarman1 = await prisma.king.upsert({
+    where: { name: "Yasovarman I" },
+    update: {},
+    create: {
+      name: "Yasovarman I",
+      reignStart: 889,
+      reignEnd: 910,
+      description:
+        "Yasovarman I founded Yasodharapura, the first 'Angkor' city, and built Phnom Bakheng as the central state temple of his new capital. He was a prolific builder who established ashrams across his kingdom.",
+    },
+  });
+  const indravarman1 = await prisma.king.upsert({
+    where: { name: "Indravarman I" },
+    update: {},
+    create: {
+      name: "Indravarman I",
+      reignStart: 877,
+      reignEnd: 889,
+      description:
+        "Regarded as the first great builder-king of the Khmer Empire, Indravarman I established the Roluos group of temples — the earliest monumental Angkorian structures — and built the first great Khmer reservoir.",
+    },
+  });
+  const suryavarman1 = await prisma.king.upsert({
+    where: { name: "Suryavarman I" },
+    update: {},
+    create: {
+      name: "Suryavarman I",
+      reignStart: 1002,
+      reignEnd: 1050,
+      description:
+        "Suryavarman I greatly expanded the Khmer Empire's territory and initiated construction of Preah Vihear temple on the Dangrek escarpment. He was a skilled military and political leader.",
+    },
+  });
+  const jayavarman5 = await prisma.king.upsert({
+    where: { name: "Jayavarman V" },
+    update: {},
+    create: {
+      name: "Jayavarman V",
+      reignStart: 968,
+      reignEnd: 1001,
+      description:
+        "Jayavarman V continued the building programmes of his predecessor and commissioned Ta Keo, one of the earliest temples built entirely from sandstone, though it was never fully completed.",
+    },
+  });
+  const isanavarman1 = await prisma.king.upsert({
+    where: { name: "Isanavarman I" },
+    update: {},
+    create: {
+      name: "Isanavarman I",
+      reignStart: 616,
+      reignEnd: 637,
+      description:
+        "The king of the Chenla kingdom who founded Isanapura (modern Sambor Prei Kuk) as his capital — the earliest large planned city in Southeast Asia and a precursor to the great Angkorian temples.",
+    },
+  });
+
+  console.log("✅ Additional kings seeded");
 
   // ─── Temples ────────────────────────────────────────────────────────────────
 
@@ -268,8 +371,418 @@ async function main() {
     },
   });
 
-  console.log("✅ Temples seeded");
-  console.log("🎉 Seeding complete!");
+  console.log("✅ Temples seeded — first 5 done, adding 15 more...");
+
+  // 6. Preah Khan
+  await prisma.temple.upsert({
+    where: { slug: "preah-khan" },
+    update: {},
+    create: {
+      slug: "preah-khan",
+      name: "Preah Khan",
+      khmerName: "ប្រាសាទព្រះខ័ន",
+      description:
+        "One of the largest temples at Angkor, Preah Khan was built by Jayavarman VII in memory of his father. A magnificent maze of dark corridors, moss-covered courtyard walls, and soaring trees, it encompasses a huge area surrounded by a moat with eight nagas (serpent deities).",
+      history:
+        "Built in 1191, Preah Khan originally served as both a Buddhist monastery and a city in itself, housing over 97,000 workers who served or lived within its boundaries. The temple is known for its extraordinary narrative bas-reliefs and the mystical two-storey columnar hall — an unusual architectural anomaly among Angkor temples. Today it remains partly unrestored, which gives it a romantic, overgrown atmosphere.",
+      latitude: 13.4461,
+      longitude: 103.8567,
+      yearBuilt: 1191,
+      religion: "Buddhist (Mahayana)",
+      featuredImage: "https://picsum.photos/seed/preah-khan/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/preah-khan-2/1200/800",
+        "https://picsum.photos/seed/preah-khan-3/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: jayavarman7.id,
+      styleId: bayonStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 7. Neak Pean
+  await prisma.temple.upsert({
+    where: { slug: "neak-pean" },
+    update: {},
+    create: {
+      slug: "neak-pean",
+      name: "Neak Pean",
+      khmerName: "ប្រាសាទនាគព័ន្ធ",
+      description:
+        "A unique island temple set in the centre of a large man-made reservoir, Neak Pean ('Coiled Serpents') is a masterpiece of Khmer symbolic architecture. A circular island sanctuary sits within four interconnected pools, representing the Himalayan lake Anavatapta — believed to cure all diseases.",
+      history:
+        "Neak Pean was constructed by Jayavarman VII in the late 12th century as an island at the centre of Jayatataka Baray (reservoir). The central tower is encircled at its base by two intertwined serpents. The four surrounding pools, each guarded by a different stone animal head, symbolise the four sacred rivers of Asia. The site was both a place of ritual bathing and a philosophical representation of the centre of the universe.",
+      latitude: 13.4641,
+      longitude: 103.8683,
+      yearBuilt: 1190,
+      religion: "Buddhist (Mahayana)",
+      featuredImage: "https://picsum.photos/seed/neak-pean/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/neak-pean-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: jayavarman7.id,
+      styleId: bayonStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 8. Ta Som
+  await prisma.temple.upsert({
+    where: { slug: "ta-som" },
+    update: {},
+    create: {
+      slug: "ta-som",
+      name: "Ta Som",
+      khmerName: "ប្រាសាទតាសោម",
+      description:
+        "A small but enchanting late-12th-century temple, Ta Som is most famous for the iconic strangler fig tree that has completely engulfed its eastern entrance gopura. The contrast of sculpted stone and gnarled roots is one of the most photographed images in Angkor.",
+      history:
+        "Built by Jayavarman VII, Ta Som was a Buddhist temple dedicated to his father Dharanindravarman II. It follows the same basic layout as Ta Prohm and Banteay Kdei, with a single tower, enclosing walls, and gopuras. Unlike those larger temples, Ta Som's compact size makes it easy to explore in a single visit, and its relatively unrestored state gives it an intimate, jungle-reclaimed character.",
+      latitude: 13.4674,
+      longitude: 103.882,
+      yearBuilt: 1190,
+      religion: "Buddhist (Mahayana)",
+      featuredImage: "https://picsum.photos/seed/ta-som/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/ta-som-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: jayavarman7.id,
+      styleId: bayonStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 9. Banteay Kdei
+  await prisma.temple.upsert({
+    where: { slug: "banteay-kdei" },
+    update: {},
+    create: {
+      slug: "banteay-kdei",
+      name: "Banteay Kdei",
+      khmerName: "ប្រាសាទបន្ទាយក្តី",
+      description:
+        "Known as the 'Citadel of Chambers', Banteay Kdei is a large Buddhist monastery facing the Srah Srang reservoir. Its four entrance gopuras are adorned with the same smiling Avalokiteshvara faces found on the Bayon. In 2001, archaeologists discovered a cache of over 270 buried Buddha statues in the compound.",
+      history:
+        "Built by Jayavarman VII in the late 12th century, Banteay Kdei was constructed on the site of an earlier 10th-century temple. Like Ta Prohm, it served as a major Buddhist monastery. The temple is surrounded by a moat, and its layout features a series of concentric galleries and towers. The nearby Srah Srang ('Royal Bathing Pool') was used by the king and his royal household.",
+      latitude: 13.432,
+      longitude: 103.893,
+      yearBuilt: 1190,
+      religion: "Buddhist (Mahayana)",
+      featuredImage: "https://picsum.photos/seed/banteay-kdei/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/banteay-kdei-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: jayavarman7.id,
+      styleId: bayonStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 10. Pre Rup
+  await prisma.temple.upsert({
+    where: { slug: "pre-rup" },
+    update: {},
+    create: {
+      slug: "pre-rup",
+      name: "Pre Rup",
+      khmerName: "ប្រាសាទព្រែរូប",
+      description:
+        "Pre Rup is a towering brick-and-laterite temple mountain, built as the state temple of King Rajendravarman II. Rising on a three-tiered pyramid, it commands sweeping views across the surrounding plain. Its dramatic silhouette is especially striking at sunset, making it a beloved vantage point for visitors to Angkor.",
+      history:
+        "Consecrated in 961 CE, Pre Rup was the royal state temple of Rajendravarman II and represents a transition in Khmer architecture. Its towers are built in brick with sandstone decorative elements, and the complex includes two libraries flanking the central causeway. The name 'Pre Rup' means roughly 'turn the body', a reference to the funerary rites once performed here — ashes from the royal cremations were processed around the temple.",
+      latitude: 13.4208,
+      longitude: 103.9,
+      yearBuilt: 961,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/pre-rup/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/pre-rup-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: rajendravarman.id,
+      styleId: preRupStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 11. Phnom Bakheng
+  await prisma.temple.upsert({
+    where: { slug: "phnom-bakheng" },
+    update: {},
+    create: {
+      slug: "phnom-bakheng",
+      name: "Phnom Bakheng",
+      khmerName: "ភ្នំបាខែង",
+      description:
+        "Perched atop a natural sandstone hill 67 metres above the Angkor plain, Phnom Bakheng is one of the oldest temples in the Angkor region. It served as the first state temple of the city of Yasodharapura and remains one of the finest spots to watch the sunset over Angkor Wat.",
+      history:
+        "Phnom Bakheng was built by King Yasovarman I in the late 9th century as the centrepiece of his new capital. It was designed as a symbolic representation of Mount Meru, the cosmic mountain at the centre of the universe in Hindu cosmology. The temple originally held 108 towers arranged on five terraces. Over the centuries it was occupied by various kings and later transformed into a Buddhist site.",
+      latitude: 13.4126,
+      longitude: 103.8592,
+      yearBuilt: 889,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/phnom-bakheng/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/phnom-bakheng-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: yasovarman1.id,
+      styleId: bakhengStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 12. Ta Keo
+  await prisma.temple.upsert({
+    where: { slug: "ta-keo" },
+    update: {},
+    create: {
+      slug: "ta-keo",
+      name: "Ta Keo",
+      khmerName: "ប្រាសាទតាកែវ",
+      description:
+        "Ta Keo is notable for being the first Angkorian temple built entirely from sandstone and for remaining permanently unfinished — its towers bear no decorative carvings. This gives it a stark, monumental quality quite unlike any other temple at Angkor. It rises steeply in five tiers and commands a powerful presence on the plain.",
+      history:
+        "Construction of Ta Keo was begun by Jayavarman V around 975 CE but was never completed, possibly due to the king's death or a lightning strike during consecration (an ill omen in Khmer belief). It is the earliest example of a fully sandstone Angkorian temple, marking a key transition in construction techniques. The steep stairs and unadorned surfaces give it a very different atmosphere from the later, more ornate temples.",
+      latitude: 13.4358,
+      longitude: 103.878,
+      yearBuilt: 975,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/ta-keo/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/ta-keo-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: jayavarman5.id,
+      styleId: kohKerStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 13. Lolei
+  await prisma.temple.upsert({
+    where: { slug: "lolei" },
+    update: {},
+    create: {
+      slug: "lolei",
+      name: "Lolei",
+      khmerName: "ប្រាសាទឡូឡៃ",
+      description:
+        "One of the three temples of the Roluos Group — the earliest standing monument group in Angkor — Lolei originally sat on an island in the middle of a large reservoir. Its four brick towers are dedicated to the ancestors of King Yasovarman I and feature some of the finest early Khmer stone inscriptions.",
+      history:
+        "Built in 893 CE by King Yasovarman I on an artificial island in the Indratataka Baray (built by his father Indravarman I), Lolei was dedicated to the king's parents and grandparents. The four towers, arranged in a 2×2 grid, are now in a precarious state but still display elegant brick carvings and Sanskrit inscriptions. A modern Buddhist pagoda operates on the site today.",
+      latitude: 13.358,
+      longitude: 103.8541,
+      yearBuilt: 893,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/lolei/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/lolei-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: yasovarman1.id,
+      styleId: rolousStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 14. Preah Ko
+  await prisma.temple.upsert({
+    where: { slug: "preah-ko" },
+    update: {},
+    create: {
+      slug: "preah-ko",
+      name: "Preah Ko",
+      khmerName: "ប្រាសាទព្រះគោ",
+      description:
+        "Meaning 'Sacred Bull', Preah Ko is the oldest temple in the Roluos Group and one of the earliest examples of Angkorian temple architecture. Named after the three white stone bulls (Nandi, the mount of Shiva) that stand before the central towers, it is remarkable for its decorative plasterwork and Sanskrit and Khmer inscriptions.",
+      history:
+        "Preah Ko was dedicated in 879 CE by King Indravarman I — making it one of the first major monuments of the Angkorian era. It was built to honour the deified ancestors of the king, both royal and divine. The six brick towers are arranged in two rows of three and feature elaborate carved false doors and pilasters. The site is rich in inscriptions that provide valuable historical information about the early Khmer Empire.",
+      latitude: 13.3512,
+      longitude: 103.855,
+      yearBuilt: 879,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/preah-ko/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/preah-ko-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: indravarman1.id,
+      styleId: rolousStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 15. Beng Mealea
+  await prisma.temple.upsert({
+    where: { slug: "beng-mealea" },
+    update: {},
+    create: {
+      slug: "beng-mealea",
+      name: "Beng Mealea",
+      khmerName: "ប្រាសាទបឹងមាលា",
+      description:
+        "One of the most dramatically ruined temples in Cambodia, Beng Mealea is a sprawling complex roughly the same footprint as Angkor Wat. Located 68 km east of Siem Reap and largely unrestored, it is a spectacular tangle of collapsed towers, jungle roots, and mossy stone galleries — an adventurer's dream.",
+      history:
+        "Built in the early 12th century, Beng Mealea is believed to have been one of the earliest temples in the Angkor Wat style, perhaps serving as a prototype for the great monument. The temple was dedicated to Vishnu and appears to have been constructed during the reign of Suryavarman II. Its remote location protected it from major looting but also led to centuries of abandonment and collapse.",
+      latitude: 13.4672,
+      longitude: 104.2308,
+      yearBuilt: 1115,
+      religion: "Hindu (Vaishnavite)",
+      featuredImage: "https://picsum.photos/seed/beng-mealea/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/beng-mealea-2/1200/800",
+        "https://picsum.photos/seed/beng-mealea-3/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: suryavarman2.id,
+      styleId: angkorWatStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 16. Prasat Preah Vihear
+  await prisma.temple.upsert({
+    where: { slug: "prasat-preah-vihear" },
+    update: {},
+    create: {
+      slug: "prasat-preah-vihear",
+      name: "Prasat Preah Vihear",
+      khmerName: "ប្រាសាទព្រះវិហារ",
+      description:
+        "A UNESCO World Heritage Site perched dramatically on a 525-metre cliff of the Dangrek Mountains, Prasat Preah Vihear is one of the most spectacular examples of Khmer architecture. Its sequence of towers and processional causeways stretches over 800 metres along the mountain ridge, offering sweeping views over the Cambodian plain.",
+      history:
+        "Construction began in the 9th century and continued over several reigns, reaching its current form under Suryavarman II in the 12th century. Dedicated to Shiva, the temple's location was chosen for its proximity to the heavens. It was the subject of a long territorial dispute between Cambodia and Thailand, settled by the International Court of Justice in 1962 in Cambodia's favour. It was inscribed as a UNESCO World Heritage Site in 2008.",
+      latitude: 14.3938,
+      longitude: 104.6806,
+      yearBuilt: 1000,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/preah-vihear-temple/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/preah-vihear-2/1200/800",
+        "https://picsum.photos/seed/preah-vihear-3/1200/800",
+      ],
+      provinceId: preahVihear.id,
+      kingId: suryavarman1.id,
+      styleId: preRupStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 17. Banteay Chhmar
+  await prisma.temple.upsert({
+    where: { slug: "banteay-chhmar" },
+    update: {},
+    create: {
+      slug: "banteay-chhmar",
+      name: "Banteay Chhmar",
+      khmerName: "ប្រាសាទបន្ទាយឆ្មារ",
+      description:
+        "Banteay Chhmar ('Narrow Fortress') is one of the most remarkable and least-visited temple complexes of the Jayavarman VII period. A remote gem in northwestern Cambodia, it is notable for its extraordinary bas-reliefs — including unique depictions of multi-armed bodhisattvas — and its vast surrounding moat.",
+      history:
+        "Built by Jayavarman VII in the late 12th to early 13th century, Banteay Chhmar was dedicated to the king's son and the four generals who died bravely in battle protecting the king. The temple complex encompasses a huge area and includes a series of gopuras with the characteristic face towers of the Bayon style. Much of the temple has collapsed or been looted, but major conservation work has been ongoing since the 2000s.",
+      latitude: 14.0734,
+      longitude: 103.0849,
+      yearBuilt: 1195,
+      religion: "Buddhist (Mahayana)",
+      featuredImage: "https://picsum.photos/seed/banteay-chhmar/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/banteay-chhmar-2/1200/800",
+      ],
+      provinceId: banteayMeanchey.id,
+      kingId: jayavarman7.id,
+      styleId: bayonStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 18. Sambor Prei Kuk
+  await prisma.temple.upsert({
+    where: { slug: "sambor-prei-kuk" },
+    update: {},
+    create: {
+      slug: "sambor-prei-kuk",
+      name: "Sambor Prei Kuk",
+      khmerName: "ប្រាសាទសំបូរព្រៃគុក",
+      description:
+        "A UNESCO World Heritage Site and the earliest large Khmer temple complex, Sambor Prei Kuk ('Temple in the Richness of the Forest') predates Angkor by several centuries. Its brick towers, set among ancient trees in a remote forest, represent the flowering of the Chenla period and laid the architectural foundation for all later Khmer temple construction.",
+      history:
+        "Built by King Isanavarman I in the early 7th century as the capital city of Isanapura, Sambor Prei Kuk comprises over 100 brick towers across three main groups. Its octagonal towers are a unique stylistic feature seen nowhere else. The complex includes temples to both Shiva and Vishnu and demonstrates the sophisticated urban planning and religious culture of Pre-Angkorian Cambodia. It was inscribed as a UNESCO World Heritage Site in 2017.",
+      latitude: 12.8383,
+      longitude: 104.9904,
+      yearBuilt: 616,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/sambor-prei-kuk/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/sambor-prei-kuk-2/1200/800",
+        "https://picsum.photos/seed/sambor-prei-kuk-3/1200/800",
+      ],
+      provinceId: kampongThom.id,
+      kingId: isanavarman1.id,
+      styleId: samborStyle.id,
+      eraId: preAngkorian.id,
+    },
+  });
+
+  // 19. Prasat Kravan
+  await prisma.temple.upsert({
+    where: { slug: "prasat-kravan" },
+    update: {},
+    create: {
+      slug: "prasat-kravan",
+      name: "Prasat Kravan",
+      khmerName: "ប្រាសាទក្រវាន់",
+      description:
+        "Prasat Kravan ('Cardamom Sanctuary') is a small but extraordinary Hindu temple consisting of five brick towers in a row. What makes it uniquely special is the interior: three of the towers contain rare, large-scale bas-reliefs of Vishnu and Lakshmi carved directly into the brick — the only such examples in Khmer art.",
+      history:
+        "Consecrated in 921 CE, Prasat Kravan was dedicated to Vishnu and built not by a king but by high officials of the royal court. It underwent extensive French Colonial-era restoration in the 1960s. The bas-reliefs inside the towers depict Vishnu with his characteristic four arms striding across the cosmos, and Lakshmi in a posture of intercession — scenes of extraordinary artistry and theological significance.",
+      latitude: 13.426,
+      longitude: 103.891,
+      yearBuilt: 921,
+      religion: "Hindu (Vaishnavite)",
+      featuredImage: "https://picsum.photos/seed/prasat-kravan/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/prasat-kravan-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: jayavarman4.id,
+      styleId: preRupStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  // 20. Eastern Mebon
+  await prisma.temple.upsert({
+    where: { slug: "eastern-mebon" },
+    update: {},
+    create: {
+      slug: "eastern-mebon",
+      name: "Eastern Mebon",
+      khmerName: "ប្រាសាទមេបូនខាងកើត",
+      description:
+        "Originally built on an island in the middle of the East Baray (a vast royal reservoir now dry), the Eastern Mebon is a striking five-tower temple mountain. Four stone elephants guard each corner of its three tiers, and the complex is renowned for its exceptionally well-preserved towers and detailed decorative carving.",
+      history:
+        "Built by King Rajendravarman II in 952 CE, the Eastern Mebon was dedicated to his parents and to Shiva. It stands at the exact centre of the East Baray, a massive reservoir 7 km by 1.8 km in size. The temple was accessed by boat when the baray was full. Its corner elephants are among the best-preserved stone sculptures in Angkor, and the brick towers still bear much of their original decorative plasterwork.",
+      latitude: 13.4327,
+      longitude: 103.9,
+      yearBuilt: 952,
+      religion: "Hindu (Shaivite)",
+      featuredImage: "https://picsum.photos/seed/eastern-mebon/1200/800",
+      galleryImages: [
+        "https://picsum.photos/seed/eastern-mebon-2/1200/800",
+      ],
+      provinceId: siemReap.id,
+      kingId: rajendravarman.id,
+      styleId: preRupStyle.id,
+      eraId: angkorian.id,
+    },
+  });
+
+  console.log("✅ All 20 temples seeded");
 }
 
 main()

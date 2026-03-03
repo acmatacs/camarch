@@ -3,13 +3,16 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://camarch.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
     default: "CamArch – Cambodian Archaeological Discovery Platform",
     template: "%s | CamArch",
   },
   description:
-    "Discover archaeological sites and ancient temples across Cambodia. Explore Angkor Wat, Bayon, Ta Prohm, and hundreds of historic Khmer temples with detailed histories, maps, and visitor guides.",
+    "Discover archaeological sites and ancient temples across Cambodia. Explore Angkor Wat, Bayon, Ta Prohm, and 20+ historic Khmer temples with detailed histories, maps, and visitor guides.",
   keywords: [
     "Cambodia temples",
     "Angkor Wat",
@@ -19,21 +22,47 @@ export const metadata: Metadata = {
     "ancient temples",
     "Bayon",
     "Ta Prohm",
+    "Banteay Srei",
+    "Koh Ker",
+    "Preah Vihear",
+    "Sambor Prei Kuk",
   ],
   authors: [{ name: "CamArch" }],
+  creator: "CamArch",
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: BASE_URL,
     siteName: "CamArch",
     title: "CamArch – Cambodian Archaeological Discovery Platform",
     description:
-      "Discover and explore the ancient temples and archaeological sites of Cambodia.",
+      "Discover and explore 20+ ancient Khmer temples and archaeological sites of Cambodia — with detailed histories, maps, and photography.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "CamArch – Cambodian Archaeological Discovery Platform",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "CamArch – Cambodian Archaeological Discovery Platform",
     description:
-      "Discover and explore the ancient temples and archaeological sites of Cambodia.",
+      "Discover and explore 20+ ancient Khmer temples and archaeological sites of Cambodia.",
+    images: ["/opengraph-image"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

@@ -22,17 +22,34 @@ export async function generateMetadata({
   const { slug } = await params;
   const temple = await prisma.temple.findUnique({
     where: { slug },
-    select: { name: true, description: true, featuredImage: true, khmerName: true },
+    select: { name: true, description: true, featuredImage: true, khmerName: true, yearBuilt: true },
   });
   if (!temple) return { title: "Temple Not Found" };
 
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://camarch.vercel.app";
+  const description = temple.description?.slice(0, 160) ?? `Learn about ${temple.name}, one of Cambodia's iconic Khmer temples.`;
+  const title = temple.khmerName
+    ? `${temple.name} (${temple.khmerName})`
+    : temple.name;
+
   return {
-    title: `${temple.name} — CamArch`,
-    description: temple.description?.slice(0, 160) ?? `Learn about ${temple.name}, one of Cambodia's iconic Khmer temples.`,
+    title,
+    description,
+    alternates: { canonical: `${BASE_URL}/temples/${slug}` },
     openGraph: {
-      title: temple.name,
-      description: temple.description?.slice(0, 160) ?? "",
-      images: temple.featuredImage ? [{ url: temple.featuredImage }] : [],
+      title,
+      description,
+      url: `${BASE_URL}/temples/${slug}`,
+      type: "article",
+      images: temple.featuredImage
+        ? [{ url: temple.featuredImage, width: 1200, height: 800, alt: temple.name }]
+        : [{ url: `/opengraph-image`, width: 1200, height: 630, alt: "CamArch" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: temple.featuredImage ? [temple.featuredImage] : ["/opengraph-image"],
     },
   };
 }
@@ -85,9 +102,39 @@ export default async function TempleDetailPage({
   if (!temple) notFound();
 
   const galleryImages = temple.galleryImages ?? [];
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://camarch.vercel.app";
+
+  // JSON-LD Structured Data
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    name: temple.name,
+    alternateName: temple.khmerName ?? undefined,
+    description: temple.description,
+    url: `${BASE_URL}/temples/${slug}`,
+    image: temple.featuredImage || undefined,
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: temple.latitude,
+      longitude: temple.longitude,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "KH",
+      addressRegion: temple.province?.name ?? "Cambodia",
+    },
+    ...(temple.yearBuilt && { dateCreated: String(temple.yearBuilt) }),
+    ...(temple.religion && { additionalProperty: { "@type": "PropertyValue", name: "Religion", value: temple.religion } }),
+  };
 
   return (
     <div className="bg-sandstone min-h-screen">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* ─── Hero banner ────────────────────────────────────────────────── */}
       <div
         className="relative h-72 md:h-96 bg-charcoal overflow-hidden"
