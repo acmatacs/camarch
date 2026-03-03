@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Ancient Angkor Design Tokens */
+  --color-sandstone: #F7F5F0;
+  --color-temple-slate: #1A1C1E;
+  --color-jungle: #2C4C3B;
+  --color-gold: #C57D3E;
+  --color-charcoal: #222222;
+
+  --font-heading: 'Cinzel', 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', 'Lato', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-sandstone);
+    color: var(--color-charcoal);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: 0.02em;
+  }
+}
+
+@layer components {
+  /* Reusable card component */
+  .card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-shadow duration-300 hover:shadow-lg;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg bg-jungle text-sandstone font-body font-medium text-sm tracking-wide transition-all duration-200 hover:bg-[#3a6450] hover:shadow-md active:scale-95;
+  }
+
+  /* Secondary / outline button */
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg border-2 border-jungle text-jungle font-body font-medium text-sm tracking-wide transition-all duration-200 hover:bg-jungle hover:text-sandstone active:scale-95;
+  }
+
+  /* Gold accent button */
+  .btn-gold {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gold text-white font-body font-medium text-sm tracking-wide transition-all duration-200 hover:bg-[#b06b2e] hover:shadow-md active:scale-95;
+  }
+
+  /* Section wrapper */
+  .section-wrapper {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Heading decorative underline */
+  .heading-underline {
+    @apply relative inline-block after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gold after:rounded-full;
+  }
+
+  /* Tag / badge */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium tracking-wide;
+  }
+
+  /* Jungle green badge */
+  .badge-jungle {
+    @apply badge bg-jungle/10 text-jungle;
+  }
+
+  /* Gold badge */
+  .badge-gold {
+    @apply badge bg-gold/10 text-gold;
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .text-sandstone {
+    color: var(--color-sandstone);
+  }
+
+  .bg-sandstone {
+    background-color: var(--color-sandstone);
+  }
+
+  .text-jungle {
+    color: var(--color-jungle);
+  }
+
+  .bg-jungle {
+    background-color: var(--color-jungle);
+  }
+
+  .text-gold {
+    color: var(--color-gold);
+  }
+
+  .bg-gold {
+    background-color: var(--color-gold);
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-sandstone);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-jungle);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a6450;
+  }
+}

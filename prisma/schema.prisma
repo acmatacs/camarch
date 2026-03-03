@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Province {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  temples     Temple[]
+}
+
+model King {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  reignStart  Int?
+  reignEnd    Int?
+  description String?
+  temples     Temple[]
+}
+
+model Style {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  period  String?
+  temples Temple[]
+}
+
+model Era {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  temples Temple[]
+}
+
+model Temple {
+  id             Int      @id @default(autoincrement())
+  slug           String   @unique
+  name           String
+  khmerName      String?
+  description    String   @db.Text
+  history        String?  @db.Text
+  latitude       Float
+  longitude      Float
+  provinceId     Int
+  province       Province @relation(fields: [provinceId], references: [id])
+  yearBuilt      Int?
+  kingId         Int?
+  king           King?    @relation(fields: [kingId], references: [id])
+  styleId        Int?
+  style          Style?   @relation(fields: [styleId], references: [id])
+  eraId          Int?
+  era            Era?     @relation(fields: [eraId], references: [id])
+  religion       String?
+  featuredImage  String
+  galleryImages  String[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
