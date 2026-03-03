@@ -38,7 +38,7 @@ export const metadata: Metadata = {
       "Discover and explore 20+ ancient Khmer temples and archaeological sites of Cambodia — with detailed histories, maps, and photography.",
     images: [
       {
-        url: "/opengraph-image",
+        url: `${BASE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: "CamArch – Cambodian Archaeological Discovery Platform",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     title: "CamArch – Cambodian Archaeological Discovery Platform",
     description:
       "Discover and explore 20+ ancient Khmer temples and archaeological sites of Cambodia.",
-    images: ["/opengraph-image"],
+    images: [`${BASE_URL}/opengraph-image`],
   },
   robots: {
     index: true,

@@ -42,13 +42,13 @@ export async function generateMetadata({
       type: "article",
       images: temple.featuredImage
         ? [{ url: temple.featuredImage, width: 1200, height: 800, alt: temple.name }]
-        : [{ url: `/opengraph-image`, width: 1200, height: 630, alt: "CamArch" }],
+        : [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, alt: "CamArch" }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: temple.featuredImage ? [temple.featuredImage] : ["/opengraph-image"],
+      images: temple.featuredImage ? [temple.featuredImage] : [`${BASE_URL}/opengraph-image`],
     },
   };
 }
