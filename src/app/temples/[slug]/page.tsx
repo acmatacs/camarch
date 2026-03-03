@@ -8,9 +8,17 @@ import NearbyTemples from "@/components/temples/NearbyTemples";
 import Link from "next/link";
 
 // ─── Static params for build-time SSG ─────────────────────────────────────────
+// Falls back to an empty list if the DB is unreachable at build time (e.g. Vercel CI).
+// dynamicParams = true ensures pages are still rendered on-demand in that case.
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const temples = await prisma.temple.findMany({ select: { slug: true } });
-  return temples.map((t: { slug: string }) => ({ slug: t.slug }));
+  try {
+    const temples = await prisma.temple.findMany({ select: { slug: true } });
+    return temples.map((t: { slug: string }) => ({ slug: t.slug }));
+  } catch {
+    return [];
+  }
 }
 
 // ─── SEO Metadata ─────────────────────────────────────────────────────────────
