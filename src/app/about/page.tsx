@@ -26,7 +26,7 @@ export default function AboutPage() {
       <div
         className="relative py-28 md:py-40 bg-charcoal overflow-hidden"
         style={{
-          backgroundImage: "url(https://picsum.photos/seed/about-hero/1920/800)",
+          backgroundImage: "url(https://upload.wikimedia.org/wikipedia/commons/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center 60%",
         }}
@@ -45,6 +45,57 @@ export default function AboutPage() {
           </p>
         </div>
       </div>
+
+      {/* ─── Developer Profile ───────────────────────────────────────────── */}
+      <section className="bg-white border-b border-charcoal/8">
+        <div className="section-wrapper py-16 md:py-20">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16">
+            {/* Photo */}
+            <div className="shrink-0 flex flex-col items-center gap-4">
+              <div className="w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden border border-charcoal/10 shadow-lg">
+                <Image
+                  src="/acmatac.jpg"
+                  alt="Acmatac Seing"
+                  width={176}
+                  height={176}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <div className="flex items-center gap-2 bg-jungle/8 rounded-full px-4 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-jungle animate-pulse" />
+                <span className="font-body text-xs text-jungle font-medium">Available for projects</span>
+              </div>
+            </div>
+
+            {/* Bio */}
+            <div className="flex-1 text-center md:text-left">
+              <span className="inline-block font-body text-xs text-gold uppercase tracking-widest mb-3">
+                About the Creator
+              </span>
+              <h2 className="font-heading text-3xl md:text-4xl text-charcoal mb-1">Acmatac Seing</h2>
+              <p className="font-body text-sm text-charcoal/50 mb-5">
+                Cambodian Developer &amp; Technology Enthusiast
+              </p>
+              <p className="font-body text-base text-charcoal/70 leading-relaxed mb-5 max-w-xl">
+                A Cambodian developer passionate about the intersection of technology and cultural
+                heritage. CamArch was built to make Cambodia's extraordinary Khmer temple history
+                accessible to researchers, travellers, and history enthusiasts worldwide — developed
+                in collaboration with AI to bring the vision to life.
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                {["Web Development", "Cultural Heritage", "Cambodia", "AI-Assisted Dev"].map((tag) => (
+                  <span
+                    key={tag}
+                    className="font-body text-xs text-charcoal/60 bg-charcoal/5 border border-charcoal/8 rounded-full px-3 py-1"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ─── Mission ─────────────────────────────────────────────────────── */}
       <section className="section-wrapper py-20">
@@ -130,45 +181,6 @@ export default function AboutPage() {
           ))}
         </div>
       </div>
-
-      {/* ─── Built by ─────────────────────────────────────────────────────── */}
-      <section className="section-wrapper py-20">
-        <span className="block font-body text-xs text-gold uppercase tracking-widest text-center mb-3">
-          The Creator
-        </span>
-        <h2 className="font-heading text-3xl md:text-4xl text-charcoal text-center mb-14">
-          Built by Human &amp; AI
-        </h2>
-
-        <div className="max-w-2xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 bg-white rounded-2xl border border-charcoal/8 shadow-sm p-8">
-            <div className="shrink-0">
-              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-charcoal/8 shadow-md">
-                <Image
-                  src="/acmatac.jpg"
-                  alt="Acmatac Seing"
-                  width={112}
-                  height={112}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            </div>
-            <div className="flex-1 text-center sm:text-left">
-              <p className="font-body text-xs text-gold uppercase tracking-widest mb-2">Developer</p>
-              <h3 className="font-heading text-2xl text-charcoal mb-1">Acmatac Seing</h3>
-              <p className="font-body text-sm text-charcoal/50 mb-4">Cambodian developer passionate about heritage, history, and technology.</p>
-              <div className="inline-flex items-center gap-2 bg-charcoal/4 rounded-full px-4 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-jungle"></span>
-                <span className="font-body text-xs text-charcoal/70">Developed by Acmatac &amp; AI</span>
-              </div>
-            </div>
-          </div>
-          <p className="font-body text-xs text-charcoal/35 text-center mt-6 leading-relaxed">
-            This platform was designed and built in collaboration with AI — combining human vision
-            with machine-assisted development to bring CamArch to life.
-          </p>
-        </div>
-      </section>
 
       {/* ─── CTA ─────────────────────────────────────────────────────────── */}
       <div className="bg-charcoal py-20">
