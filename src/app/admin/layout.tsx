@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
@@ -10,6 +10,12 @@ const navItems = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch("/api/admin/auth/logout", { method: "POST" });
+    router.replace("/admin/login");
+  }
 
   return (
     <div className="min-h-screen bg-charcoal/4 flex flex-col">
@@ -20,9 +26,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <span className="text-sandstone/20 text-xs">|</span>
           <span className="font-body text-xs text-sandstone/50 uppercase tracking-widest">Admin</span>
         </div>
-        <Link href="/" className="font-body text-xs text-sandstone/50 hover:text-sandstone transition-colors flex items-center gap-1">
-          ← View Site
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/" className="font-body text-xs text-sandstone/50 hover:text-sandstone transition-colors flex items-center gap-1">
+            ← View Site
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="font-body text-xs text-sandstone/40 hover:text-red-400 transition-colors"
+          >
+            Sign Out
+          </button>
+        </div>
       </header>
 
       <div className="flex flex-1">

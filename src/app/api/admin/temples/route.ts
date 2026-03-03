@@ -1,5 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+
+const TempleSchema = z.object({
+  name: z.string().min(1, "Name is required").max(200),
+  khmerName: z.string().max(200).optional().nullable(),
+  slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/, "Slug must be lowercase letters, numbers, and hyphens only"),
+  description: z.string().min(1, "Description is required").max(5000),
+  history: z.string().max(10000).optional().nullable(),
+  featuredImage: z.string().url().optional().or(z.literal("")),
+  galleryImages: z.array(z.string().url()).optional().default([]),
+  latitude: z.coerce.number().min(-90).max(90),
+  longitude: z.coerce.number().min(-180).max(180),
+  yearBuilt: z.coerce.number().int().min(0).max(2100).optional().nullable(),
+  religion: z.string().max(100).optional().nullable(),
+  provinceId: z.coerce.number().int().positive(),
+  kingId: z.coerce.number().int().positive().optional().nullable(),
+  styleId: z.coerce.number().int().positive().optional().nullable(),
+  eraId: z.coerce.number().int().positive().optional().nullable(),
+});
 
 // ─── GET all temples (admin — no pagination limit) ────────────────────────────
 export async function GET() {
@@ -24,34 +43,38 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const parsed = TempleSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
     const {
       name, khmerName, slug, description, history,
       featuredImage, galleryImages,
       latitude, longitude, yearBuilt, religion,
       provinceId, kingId, styleId, eraId,
-    } = body;
-
-    if (!name || !slug || !description || !provinceId || latitude == null || longitude == null) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-    }
+    } = parsed.data;
 
     const temple = await prisma.temple.create({
       data: {
         name,
-        khmerName: khmerName || null,
+        khmerName: khmerName ?? null,
         slug,
         description,
-        history: history || null,
-        featuredImage: featuredImage || "",
-        galleryImages: galleryImages || [],
-        latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude),
-        yearBuilt: yearBuilt ? parseInt(yearBuilt) : null,
-        religion: religion || null,
-        provinceId: parseInt(provinceId),
-        kingId: kingId ? parseInt(kingId) : null,
-        styleId: styleId ? parseInt(styleId) : null,
-        eraId: eraId ? parseInt(eraId) : null,
+        history: history ?? null,
+        featuredImage: featuredImage ?? "",
+        galleryImages: galleryImages ?? [],
+        latitude,
+        longitude,
+        yearBuilt: yearBuilt ?? null,
+        religion: religion ?? null,
+        provinceId,
+        kingId: kingId ?? null,
+        styleId: styleId ?? null,
+        eraId: eraId ?? null,
       },
     });
 
