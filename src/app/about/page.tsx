@@ -47,22 +47,40 @@ export default function AboutPage() {
       </div>
 
       {/* ─── Developer Profile ───────────────────────────────────────────── */}
-      <section className="bg-charcoal py-16">
-        <div className="section-wrapper">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-28 h-28 rounded-full overflow-hidden ring-2 ring-gold/40 shadow-xl mb-5">
-              <Image
-                src="/acmatac.jpg"
-                alt="Acmatac Seing"
-                width={112}
-                height={112}
-                className="object-cover w-full h-full"
-              />
+      <section className="relative overflow-hidden bg-charcoal py-20">
+        {/* Subtle background texture */}
+        <div className="absolute inset-0 opacity-5"
+          style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #C57D3E 0%, transparent 60%), radial-gradient(circle at 80% 50%, #2D5A45 0%, transparent 60%)" }}
+        />
+        <div className="relative z-10 section-wrapper">
+          <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-14">
+            {/* Photo */}
+            <div className="relative shrink-0">
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-gold via-gold/40 to-transparent blur-sm opacity-60" />
+              <div className="relative w-40 h-40 rounded-full overflow-hidden ring-2 ring-gold/50 shadow-2xl">
+                <Image
+                  src="/acmatac.jpg"
+                  alt="Acmatac Seing"
+                  width={160}
+                  height={160}
+                  className="object-cover w-full h-full"
+                />
+              </div>
             </div>
-            <p className="font-heading text-2xl text-white mb-1">Acmatac Seing</p>
-            <p className="font-body text-sm text-sandstone/50">
-              Designed &amp; developed by Acmatac Seing in collaboration with AI
-            </p>
+            {/* Text */}
+            <div className="text-center md:text-left">
+              <span className="font-body text-xs text-gold uppercase tracking-widest mb-3 block">
+                Built by
+              </span>
+              <h2 className="font-heading text-4xl md:text-5xl text-white mb-3">
+                Acmatac Seing
+              </h2>
+              <div className="w-12 h-px bg-gold/50 mb-4 mx-auto md:mx-0" />
+              <p className="font-body text-base text-sandstone/60 leading-relaxed">
+                Cambodian developer. This platform was designed and developed
+                by Acmatac Seing in collaboration with AI.
+              </p>
+            </div>
           </div>
         </div>
       </section>
