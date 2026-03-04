@@ -13,7 +13,7 @@ CamArch is a Next.js 16 / Prisma / PostgreSQL (Supabase) platform for discoverin
 
 ---
 
-## Current Version: v1.1.0
+## Current Version: v1.2.0
 
 Full changelog: `camarch-wiki/Releases.md`
 
@@ -133,22 +133,33 @@ JWT_SECRET=         # Min 32 chars
 
 ## Pending / Known Items
 
-- [ ] Temple write/delete API routes (`/api/admin/temples`) are **not yet guarded** with `checkPermission` — needs `temples:write` / `temples:delete` guards added
-- [ ] Reference data routes (`/api/admin/provinces`, `/api/admin/kings`, `/api/admin/styles`, `/api/admin/eras`) are **not yet guarded** — needs `temples:write` guard
+- [ ] Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` env vars to Vercel for media uploads to work in production
+- [ ] Create the Supabase Storage bucket named `temple-media` (public for PUBLIC access level)
+- [ ] Temple write/delete API routes `checkPermission` guards are NOW ADDED ✅
+- [ ] Reference data routes (`/api/admin/provinces`, `/api/admin/kings`, `/api/admin/styles`, `/api/admin/eras`) are **still not guarded** — needs `temples:write` guard
 - [ ] Password change in user edit modal — currently replaces hash if a new password is provided; no "confirm password" field yet
+- [ ] Existing seeded temples have `status: DRAFT` — need to be published manually or via the approve endpoint
 
 ---
 
-## Last Session Summary (March 4, 2026)
+## Last Session Summary (March 4, 2026 — Session 2)
 
-- Added dynamic RBAC system end-to-end
-- Users page: activate/deactivate replaces delete
-- Roles page: SF PermissionSet style
-- API-level permission enforcement (`checkPermission`)
-- UI nav permission filtering (layout.tsx)
-- Admin layout: SF Setup style sidebar with icons, search, user card
-- Header shows logged-in user name
-- Admin list page table overflow fixed
-- All TypeScript errors resolved (0 errors)
-- README, wiki (Functional + Technical docs), and Releases.md all updated
+- Added `TempleStatus` enum (DRAFT, PENDING_REVIEW, PUBLISHED, ARCHIVED) + `Media` model to Prisma schema
+- `Media` model has: url, mimeType, sizeBytes, version, tags[], accessLevel (PUBLIC/INTERNAL_ONLY), templeId, uploadedById
+- DB synced via `prisma db push`
+- Installed `papaparse` + `yet-another-react-lightbox`
+- Public APIs (`/api/temples`, `/api/temples/[slug]`, `/api/map`) now filter by `status: PUBLISHED`
+- Admin temple APIs now have `checkPermission` guards (GET→temples:read, POST/PUT→temples:write, DELETE→temples:delete)
+- `status` field added to create/update schema and Prisma calls
+- New endpoint: `POST /api/admin/temples/[id]/approve` — state machine transition with role check (PUBLISHED requires System Admin or Heritage Manager)
+- New endpoint: `POST /api/admin/temples/import` — CSV bulk import via Papaparse + Zod row validation + Prisma transaction (max 500 rows)
+- New endpoint: `GET /api/admin/temples/export?format=csv|geojson` — downloads all temples as CSV or GeoJSON
+- New Supabase Storage helper: `src/lib/supabase.ts` with `getServiceSupabase()`, bucket name, allowed MIME types, max size
+- New endpoint: `POST /api/admin/media/upload-url` — generates Supabase Storage pre-signed upload URL (JPEG/PNG/WebP, max 10MB)
+- New endpoint: `GET|POST /api/admin/media` — list media by templeId / save media record post-upload
+- New endpoint: `DELETE /api/admin/media/[id]` — deletes DB record + Supabase Storage object
+- `TempleForm.tsx` updated: status select field + media upload grid (edit mode only) with upload/delete
+- Admin temples page: status badge column, Publish/Archive quick actions, Import CSV button, Export CSV/GeoJSON buttons
+- `MediaLightbox.tsx` component created using `yet-another-react-lightbox` — grid view + lightbox viewer
+- 0 TypeScript errors confirmed
 - All changes committed and pushed to `origin/main`
