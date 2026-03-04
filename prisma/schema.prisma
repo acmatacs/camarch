@@ -53,15 +53,16 @@ model AuditLog {
 }
 
 model User {
-  id           Int        @id @default(autoincrement())
-  email        String     @unique
-  passwordHash String
-  name         String?
-  isActive     Boolean    @default(true)
-  roleId       Int?
-  role         AdminRole? @relation(fields: [roleId], references: [id])
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id               Int              @id @default(autoincrement())
+  email            String           @unique
+  passwordHash     String
+  name             String?
+  isActive         Boolean          @default(true)
+  roleId           Int?
+  role             AdminRole?       @relation(fields: [roleId], references: [id])
+  contentVersions  ContentVersion[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 }
 
 model AdminRole {
@@ -142,29 +143,42 @@ model Temple {
   religion       String?
   featuredImage  String
   galleryImages  String[]
-  status         TempleStatus @default(DRAFT)
-  media          Media[]
+  status           TempleStatus      @default(DRAFT)
+  contentDocuments ContentDocument[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
   @@index([status])
 }
 
-model Media {
-  id          Int              @id @default(autoincrement())
-  url         String
-  mimeType    String           @default("image/jpeg")
-  sizeBytes   Int?             // file size in bytes
-  version     Int              @default(1)
-  tags        String[]
-  accessLevel MediaAccessLevel @default(PUBLIC)
-  templeId    Int
-  temple      Temple           @relation(fields: [templeId], references: [id], onDelete: Cascade)
-  uploadedById Int?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+model ContentDocument {
+  id        Int              @id @default(autoincrement())
+  title     String           // friendly display name (original filename)
+  templeId  Int
+  temple    Temple           @relation(fields: [templeId], references: [id], onDelete: Cascade)
+  versions  ContentVersion[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   @@index([templeId])
-  @@index([accessLevel])
+}
+
+model ContentVersion {
+  id            Int              @id @default(autoincrement())
+  versionNumber Int              @default(1)
+  url           String
+  storagePath   String?
+  mimeType      String           @default("image/jpeg")
+  sizeBytes     Int?
+  accessLevel   MediaAccessLevel @default(PUBLIC)
+  isCurrent     Boolean          @default(true)
+  documentId    Int
+  document      ContentDocument  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  uploadedById  Int?
+  uploadedBy    User?            @relation(fields: [uploadedById], references: [id])
+  createdAt     DateTime         @default(now())
+
+  @@index([documentId])
+  @@index([isCurrent])
 }
 

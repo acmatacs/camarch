@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import type { FiltersResponse } from "@/types";
 
 type TempleStatus = "DRAFT" | "PENDING_REVIEW" | "PUBLISHED" | "ARCHIVED";
@@ -62,92 +61,6 @@ export default function TempleForm({ mode, templeId, initialData }: TempleFormPr
   const [error, setError] = useState<string | null>(null);
   const [slugEdited, setSlugEdited] = useState(mode === "edit");
 
-  // ── Media state ────────────────────────────────────────────────────────────
-  interface MediaRecord {
-    id: number;
-    url: string;
-    mimeType: string;
-    sizeBytes: number | null;
-    tags: string[];
-    accessLevel: "PUBLIC" | "INTERNAL_ONLY";
-  }
-  const [media, setMedia] = useState<MediaRecord[]>([]);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-
-  // Fetch existing media in edit mode
-  useEffect(() => {
-    if (mode === "edit" && templeId) {
-      fetch(`/api/admin/media?templeId=${templeId}`)
-        .then((r) => r.json())
-        .then((d) => setMedia(d.data ?? []))
-        .catch(console.error);
-    }
-  }, [mode, templeId]);
-
-  const handleMediaUpload = async (file: File) => {
-    setUploading(true);
-    setUploadError(null);
-    try {
-      // Step 1: Get pre-signed upload URL
-      const urlRes = await fetch("/api/admin/media/upload-url", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          filename: file.name,
-          mimeType: file.type,
-          sizeBytes: file.size,
-          templeId,
-        }),
-      });
-      if (!urlRes.ok) {
-        const err = await urlRes.json();
-        throw new Error(err.error ?? "Failed to get upload URL");
-      }
-      const { data: uploadData } = await urlRes.json();
-
-      // Step 2: Upload directly to Supabase Storage
-      const uploadRes = await fetch(uploadData.signedUrl, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-      if (!uploadRes.ok) throw new Error("Upload to storage failed");
-
-      // Step 3: Save Media record
-      const saveRes = await fetch("/api/admin/media", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: uploadData.publicUrl,
-          storagePath: uploadData.storagePath,
-          mimeType: uploadData.mimeType,
-          sizeBytes: uploadData.sizeBytes,
-          templeId: uploadData.templeId,
-          accessLevel: "PUBLIC",
-          tags: [],
-        }),
-      });
-      if (!saveRes.ok) throw new Error("Failed to save media record");
-      const { data: newMedia } = await saveRes.json();
-      setMedia((prev) => [...prev, newMedia]);
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Upload failed");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleDeleteMedia = async (id: number) => {
-    if (!confirm("Remove this media file?")) return;
-    try {
-      await fetch(`/api/admin/media/${id}`, { method: "DELETE" });
-      setMedia((prev) => prev.filter((m) => m.id !== id));
-    } catch {
-      alert("Failed to delete media.");
-    }
-  };
-  
   useEffect(() => {
     fetch("/api/filters")
       .then((r) => r.json())
@@ -207,7 +120,7 @@ export default function TempleForm({ mode, templeId, initialData }: TempleFormPr
   const requiredStar = <span className="text-red-400 ml-0.5">*</span>;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 max-w-3xl">
+    <form id="temple-form" onSubmit={handleSubmit} className="space-y-8">
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm font-body px-4 py-3 rounded-lg">
           {error}
@@ -432,69 +345,6 @@ export default function TempleForm({ mode, templeId, initialData }: TempleFormPr
           </div>
         </div>
       </section>
-
-      {/* ─── Media Library (edit mode only) ──────────────────────────── */}
-      {mode === "edit" && templeId && (
-        <section className="bg-white rounded-xl border border-charcoal/8 shadow-sm p-6 space-y-5">
-          <h2 className="font-heading text-sm text-charcoal border-b border-charcoal/8 pb-3">
-            Media Library
-          </h2>
-
-          {uploadError && (
-            <p className="font-body text-xs text-red-500">{uploadError}</p>
-          )}
-
-          {/* Upload button */}
-          <label className={`inline-flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border border-charcoal/15 font-body text-sm text-charcoal/70 hover:bg-charcoal/4 transition-colors ${uploading ? "opacity-50 pointer-events-none" : ""}`}>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-            </svg>
-            {uploading ? "Uploading…" : "Upload Image"}
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              className="hidden"
-              disabled={uploading}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleMediaUpload(file);
-                e.target.value = "";
-              }}
-            />
-          </label>
-          <p className="font-body text-[10px] text-charcoal/35">JPEG, PNG or WebP · max 10 MB per file</p>
-
-          {/* Media grid */}
-          {media.length > 0 && (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-              {media.map((m) => (
-                <div key={m.id} className="relative group rounded-lg overflow-hidden bg-charcoal/5 aspect-square">
-                  <Image
-                    src={m.url}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                  {m.accessLevel === "INTERNAL_ONLY" && (
-                    <span className="absolute top-1 left-1 bg-gold/90 text-charcoal text-[9px] font-body font-semibold px-1 rounded">
-                      PRIVATE
-                    </span>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteMedia(m.id)}
-                    className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    title="Remove"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
 
       {/* ─── Submit ────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-4 pb-8">

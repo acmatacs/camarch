@@ -38,7 +38,6 @@ export async function GET(req: NextRequest, { params }: Params) {
         era: true,
         style: true,
         king: true,
-        media: { orderBy: { createdAt: "asc" } },
       },
     });
     if (!temple) return NextResponse.json({ error: "Not found" }, { status: 404 });
