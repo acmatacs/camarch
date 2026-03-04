@@ -24,13 +24,11 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const templeId = searchParams.get("templeId");
-    if (!templeId) {
-      return NextResponse.json({ error: "templeId is required" }, { status: 400 });
-    }
 
     const docs = await prisma.contentDocument.findMany({
-      where: { templeId: parseInt(templeId) },
+      where: templeId ? { templeId: parseInt(templeId) } : undefined,
       include: {
+        temple: { select: { id: true, name: true, slug: true } },
         versions: {
           where: { isCurrent: true },
           include: { uploadedBy: { select: { id: true, name: true, email: true } } },

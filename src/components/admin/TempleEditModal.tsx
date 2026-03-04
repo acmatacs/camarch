@@ -81,13 +81,13 @@ export default function TempleEditModal({ templeId, onClose, onSaved }: TempleEd
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-50 flex items-start justify-center bg-charcoal/50 backdrop-blur-sm overflow-y-auto py-10 px-4"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-[2px] overflow-y-auto py-10 px-4"
       onClick={(e) => { if (e.target === backdropRef.current) onClose(); }}
     >
-      <div className="relative w-full max-w-3xl bg-charcoal/5 rounded-2xl shadow-2xl">
+      <div className="relative w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden border border-charcoal/10">
 
         {/* ── Modal Header ─────────────────────────────────────────── */}
-        <div className="flex items-center justify-between px-6 py-4 bg-white rounded-t-2xl border-b border-charcoal/10 sticky top-0 z-10">
+        <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-charcoal/10 sticky top-0 z-10">
           <div>
             <h2 className="font-heading text-lg text-charcoal">Edit Temple</h2>
             {temple?.name && (
@@ -117,7 +117,7 @@ export default function TempleEditModal({ templeId, onClose, onSaved }: TempleEd
         </div>
 
         {/* ── Body ─────────────────────────────────────────────────── */}
-        <div className="p-6">
+        <div className="bg-[#f3f3f3] p-6">
           {fetchError ? (
             <p className="font-body text-sm text-red-500 text-center py-8">Failed to load temple data.</p>
           ) : !temple ? (
