@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import TempleEditModal from "@/components/admin/TempleEditModal";
 
 type TempleStatus = "DRAFT" | "PENDING_REVIEW" | "PUBLISHED" | "ARCHIVED";
 
@@ -40,6 +41,7 @@ export default function AdminTemplesPage() {
   const [approving, setApproving] = useState<number | null>(null);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<string | null>(null);
+  const [editingTemple, setEditingTemple] = useState<AdminTemple | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchTemples = () => {
@@ -114,6 +116,7 @@ export default function AdminTemplesPage() {
   };
 
   return (
+    <>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -199,7 +202,7 @@ export default function AdminTemplesPage() {
                       </div>
                     </td>
                     <td className="px-5 py-3">
-                      <p className="font-body text-sm font-medium text-charcoal">{temple.name}</p>
+                      <Link href={`/admin/temples/${temple.id}`} className="font-body text-sm font-medium text-charcoal hover:text-jungle transition-colors">{temple.name}</Link>
                       <p className="font-body text-xs text-charcoal/35">/temples/{temple.slug}</p>
                     </td>
                     <td className="px-5 py-3 font-body text-sm text-charcoal/60 hidden sm:table-cell">
@@ -237,18 +240,17 @@ export default function AdminTemplesPage() {
                           </button>
                         )}
                         <Link
-                          href={`/temples/${temple.slug}`}
-                          target="_blank"
+                          href={`/admin/temples/${temple.id}`}
                           className="font-body text-xs text-charcoal/40 hover:text-charcoal transition-colors px-2 py-1 rounded hover:bg-charcoal/5"
                         >
                           View
                         </Link>
-                        <Link
-                          href={`/admin/temples/${temple.id}/edit`}
+                        <button
+                          onClick={() => setEditingTemple(temple)}
                           className="font-body text-xs text-jungle hover:underline px-2 py-1 rounded hover:bg-jungle/5"
                         >
                           Edit
-                        </Link>
+                        </button>
                         <button
                           onClick={() => handleDelete(temple.id, temple.name)}
                           disabled={deleting === temple.id}
@@ -266,5 +268,15 @@ export default function AdminTemplesPage() {
         )}
       </div>
     </div>
+
+      {/* ── Edit Modal ─────────────────────────────────────────────── */}
+      {editingTemple && (
+        <TempleEditModal
+          templeId={editingTemple.id}
+          onClose={() => setEditingTemple(null)}
+          onSaved={() => { fetchTemples(); setEditingTemple(null); }}
+        />
+      )}
+    </>
   );
 }

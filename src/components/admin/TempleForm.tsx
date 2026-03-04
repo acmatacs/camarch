@@ -33,6 +33,7 @@ interface TempleFormProps {
   mode: "create" | "edit";
   templeId?: number;
   initialData?: TempleFormInitial;
+  onSuccess?: () => void;
 }
 
 const EMPTY: TempleFormData = {
@@ -46,7 +47,7 @@ function slugify(str: string) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-export default function TempleForm({ mode, templeId, initialData }: TempleFormProps) {
+export default function TempleForm({ mode, templeId, initialData, onSuccess }: TempleFormProps) {
   const router = useRouter();
   const [form, setForm] = useState<TempleFormData>(() => ({
     ...EMPTY,
@@ -106,8 +107,12 @@ export default function TempleForm({ mode, templeId, initialData }: TempleFormPr
         throw new Error(data.error || "Something went wrong");
       }
 
-      router.push("/admin/temples");
-      router.refresh();
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push("/admin/temples");
+        router.refresh();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {

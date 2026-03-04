@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import Image from "next/image";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -77,8 +78,6 @@ function FileIcon({ mimeType }: { mimeType: string }) {
 export default function FilesRelatedList({ templeId }: Props) {
   const [docs, setDocs] = useState<ContentDocument[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expandedDocId, setExpandedDocId] = useState<number | null>(null);
-  const [versionCache, setVersionCache] = useState<Record<number, ContentVersion[]>>({});
   const [uploading, setUploading] = useState<"new" | number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -160,12 +159,7 @@ export default function FilesRelatedList({ templeId }: Props) {
         body: JSON.stringify({ url, storagePath, mimeType, sizeBytes, accessLevel: "PUBLIC" }),
       });
       if (!saveRes.ok) throw new Error("Failed to save version record");
-      // Reload docs + clear version cache for this doc so it refetches
-      setVersionCache((prev) => { const next = { ...prev }; delete next[docId]; return next; });
       await loadDocs();
-      // Re-expand to show updated history
-      setExpandedDocId(docId);
-      await loadVersionHistory(docId);
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : "Upload failed");
     } finally {
@@ -178,29 +172,8 @@ export default function FilesRelatedList({ templeId }: Props) {
     try {
       await fetch(`/api/admin/content-documents/${docId}`, { method: "DELETE" });
       setDocs((prev) => prev.filter((d) => d.id !== docId));
-      if (expandedDocId === docId) setExpandedDocId(null);
     } catch {
       alert("Failed to delete file.");
-    }
-  }
-
-  async function loadVersionHistory(docId: number) {
-    if (versionCache[docId]) return; // already loaded
-    try {
-      const res = await fetch(`/api/admin/content-documents/${docId}/versions`);
-      const json = await res.json();
-      setVersionCache((prev) => ({ ...prev, [docId]: json.data ?? [] }));
-    } catch {
-      // silently fail
-    }
-  }
-
-  function toggleExpand(docId: number) {
-    if (expandedDocId === docId) {
-      setExpandedDocId(null);
-    } else {
-      setExpandedDocId(docId);
-      loadVersionHistory(docId);
     }
   }
 
@@ -260,9 +233,7 @@ export default function FilesRelatedList({ templeId }: Props) {
         <ul className="divide-y divide-charcoal/5">
           {docs.map((doc) => {
             const latest = latestVersion(doc);
-            const isExpanded = expandedDocId === doc.id;
             const isUploadingVersion = uploading === doc.id;
-            const cachedVersions = versionCache[doc.id];
 
             return (
               <li key={doc.id}>
@@ -286,20 +257,15 @@ export default function FilesRelatedList({ templeId }: Props) {
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <button
-                        type="button"
-                        onClick={() => toggleExpand(doc.id)}
-                        className="font-body text-sm text-jungle hover:underline truncate max-w-[180px] text-left"
+                      <Link
+                        href={`/admin/content-documents/${doc.id}`}
+                        className="font-body text-sm text-jungle hover:underline truncate max-w-[180px]"
                         title={doc.title}
                       >
                         {doc.title}
-                      </button>
+                      </Link>
                       {/* Version badge */}
-                      <span
-                        className="text-[10px] font-body font-semibold bg-jungle/10 text-jungle px-1.5 py-0.5 rounded cursor-pointer hover:bg-jungle/20 transition-colors"
-                        onClick={() => toggleExpand(doc.id)}
-                        title="Version history"
-                      >
+                      <span className="text-[10px] font-body font-semibold bg-jungle/10 text-jungle px-1.5 py-0.5 rounded">
                         v{latest?.versionNumber ?? 1}
                       </span>
                       {/* Access badge */}
@@ -377,51 +343,6 @@ export default function FilesRelatedList({ templeId }: Props) {
                     </button>
                   </div>
                 </div>
-
-                {/* ── Version history panel ─────────────────────────────── */}
-                {isExpanded && (
-                  <div className="bg-charcoal/[0.025] border-t border-charcoal/5">
-                    <div className="px-5 py-2 flex items-center gap-2 border-b border-charcoal/5">
-                      <svg className="w-3 h-3 text-charcoal/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="font-body text-[11px] font-semibold text-charcoal/50 uppercase tracking-wide">
-                        Version History
-                      </span>
-                    </div>
-                    {!cachedVersions ? (
-                      <div className="px-5 py-3 font-body text-xs text-charcoal/30">Loading…</div>
-                    ) : (
-                      <ul className="divide-y divide-charcoal/5">
-                        {cachedVersions.map((v) => (
-                          <li key={v.id} className="flex items-center gap-3 px-5 py-2.5 hover:bg-charcoal/[0.02]">
-                            <span className={`text-[10px] font-body font-bold px-1.5 py-0.5 rounded ${v.isCurrent ? "bg-jungle text-white" : "bg-charcoal/10 text-charcoal/50"}`}>
-                              v{v.versionNumber}
-                            </span>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-body text-xs text-charcoal/70">
-                                {formatSize(v.sizeBytes)}
-                                {v.isCurrent && <span className="ml-1.5 text-jungle font-semibold">• Current</span>}
-                              </p>
-                              <p className="font-body text-[10px] text-charcoal/35">
-                                {v.uploadedBy?.name ?? v.uploadedBy?.email ?? "Unknown"} · {timeAgo(v.createdAt)}
-                              </p>
-                            </div>
-                            <a
-                              href={v.url}
-                              download
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="font-body text-[11px] text-jungle hover:underline flex-shrink-0"
-                            >
-                              Download
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
               </li>
             );
           })}
