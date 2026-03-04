@@ -13,7 +13,7 @@ CamArch is a Next.js 16 / Prisma / PostgreSQL (Supabase) platform for discoverin
 
 ---
 
-## Current Version: v1.2.0
+## Current Version: v1.3.0
 
 Full changelog: `camarch-wiki/Releases.md`
 
@@ -99,13 +99,15 @@ All pages require a valid JWT with `admin:access` permission.
 
 ## Database Models (summary)
 
-- `Temple` — core content (slug, name, khmerName, images, GPS, FK to Province/King/Style/Era)
+- `Temple` — core content (slug, name, khmerName, images, GPS, FK to Province/King/Style/Era, TempleStatus)
 - `Province`, `King`, `Style`, `Era` — reference data
-- `User` — admin accounts (`isActive`, FK to `AdminRole`)
+- `User` — admin accounts (`isActive`, FK to `AdminRole`, back-relation to `ContentVersion`)
 - `AdminRole` — named roles (`isSystem` flag)
 - `Permission` — permission keys with module grouping
 - `RolePermission` — join table
 - `AuditLog` — append-only action log
+- `ContentDocument` — file entity; title + templeId; has multiple `ContentVersion` records
+- `ContentVersion` — a specific file upload version; url, storagePath, mimeType, sizeBytes, versionNumber, isCurrent, accessLevel, uploadedById → User
 
 ---
 
@@ -135,14 +137,42 @@ JWT_SECRET=         # Min 32 chars
 
 - [ ] Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` env vars to Vercel for media uploads to work in production
 - [ ] Create the Supabase Storage bucket named `temple-media` (public for PUBLIC access level)
-- [ ] Temple write/delete API routes `checkPermission` guards are NOW ADDED ✅
 - [ ] Reference data routes (`/api/admin/provinces`, `/api/admin/kings`, `/api/admin/styles`, `/api/admin/eras`) are **still not guarded** — needs `temples:write` guard
 - [ ] Password change in user edit modal — currently replaces hash if a new password is provided; no "confirm password" field yet
 - [ ] Existing seeded temples have `status: DRAFT` — need to be published manually or via the approve endpoint
+- [ ] `MediaLightbox.tsx` in `src/components/ui/` may now be dead code — was used by the old media grid; can be removed if unused
 
 ---
 
-## Last Session Summary (March 4, 2026 — Session 2)
+## Last Session Summary (March 4, 2026 — Session 3)
+
+- Replaced `Media` model with `ContentDocument` + `ContentVersion` to mirror Salesforce's ContentDocument/ContentVersion pattern
+- `ContentDocument`: title, templeId; parent file entity  
+- `ContentVersion`: versionNumber, url, storagePath, mimeType, sizeBytes, accessLevel, isCurrent, documentId, uploadedById → User
+- DB synced via `prisma db push` (dropped old 1-row Media table)
+- Prisma client regenerated
+- Added `contentVersions ContentVersion[]` back-relation to User model
+- Created new API routes:
+  - `GET|POST /api/admin/content-documents` — list by templeId / create new document + first version
+  - `GET|DELETE /api/admin/content-documents/[id]` — fetch with all versions / delete doc + all storage objects
+  - `GET|POST /api/admin/content-documents/[id]/versions` — list version history / add new version (marks previous isCurrent=false)
+- Tombstoned old `GET|POST /api/admin/media` and `DELETE /api/admin/media/[id]` routes (410 Gone)
+- Created `FilesRelatedList` component (`src/components/admin/FilesRelatedList.tsx`):
+  - SF-style "Files" related list with file count badge and "Upload File" button
+  - File rows: thumbnail preview, title (click = expand), version badge (`v2`), private badge, size, uploader, time ago
+  - Actions on hover: Preview (lightbox), Download, Upload New Version (🔄), Delete
+  - Expandable version history panel: shows all versions with isCurrent indicator, download link, uploader, date
+  - Built-in lightbox for image preview
+  - 3-step upload flow: `POST /api/admin/media/upload-url` → `PUT signedUrl` → `POST /api/admin/content-documents` or `POST /api/admin/content-documents/[id]/versions`
+- Removed all media state/handlers/JSX from `TempleForm.tsx`
+- Added `id="temple-form"` to `<form>` in TempleForm so header Save button can trigger it via `form="temple-form"`
+- Redesigned `/admin/temples/[id]/edit` with Salesforce 2-column layout:
+  - Header bar: breadcrumb, temple name, status badge, province, Save Changes / Cancel buttons (Save wired to form id)
+  - Left column (lg:col-span-2): TempleForm
+  - Right column (lg:col-span-1): FilesRelatedList + Record Info card (ID, Created, Last Modified, Public URL)
+- Fixed `.env.local` — added `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
+- 0 TypeScript errors confirmed
+- Committed and pushed: `feat: SF-style record layout with ContentDocument/ContentVersion file management`
 
 - Added `TempleStatus` enum (DRAFT, PENDING_REVIEW, PUBLISHED, ARCHIVED) + `Media` model to Prisma schema
 - `Media` model has: url, mimeType, sizeBytes, version, tags[], accessLevel (PUBLIC/INTERNAL_ONLY), templeId, uploadedById
