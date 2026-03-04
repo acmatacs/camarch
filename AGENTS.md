@@ -144,7 +144,28 @@ JWT_SECRET=         # Min 32 chars
 
 ---
 
-## Last Session Summary (March 4, 2026 — Session 3)
+## Last Session Summary (March 4, 2026 — Session 4)
+
+- Added `onSuccess?: () => void` prop to `TempleForm` — when provided, called instead of `router.push("/admin/temples")`, enabling use inside a modal
+- Created `TempleEditModal.tsx` (`src/components/admin/TempleEditModal.tsx`):
+  - Self-fetches full temple data from `GET /api/admin/temples/:id` on open
+  - Sticky header with temple name, Save button (targets `form="temple-form"`), close (×)
+  - Scroll-trapped backdrop, Escape key closes
+  - Loading spinner while fetching, error state if fetch fails
+  - Wraps `TempleForm` in edit mode; calls `onSaved()` + `onClose()` on success
+- Created `/admin/temples/[id]/page.tsx` — SF-style record detail page:
+  - Client component, fetches temple on load, re-fetches after modal save
+  - Header: breadcrumb, temple name + status badge, Public Page link, Delete button, Edit button (opens modal)
+  - Left col (lg:2): Temple Details card (Province, Style, Era, King, Year, Religion, GPS), Content card (Description, History), FilesRelatedList
+  - Right col (lg:1): Gallery preview grid, Record Info card (ID, slug, dates, link to full edit page)
+  - Edit button triggers `TempleEditModal`; Delete navigates to list on success
+- Updated `/admin/temples/page.tsx`:
+  - Temple name → `<Link href="/admin/temples/${id}">` (record detail page)
+  - "View" action → `<Link href="/admin/temples/${id}">` (record detail page, not public)
+  - "Edit" action → `setEditingTemple(temple)` opens `TempleEditModal`
+  - Added `TempleEditModal` render at bottom of component with `onSaved: fetchTemples`
+- 0 TypeScript errors confirmed
+- Committed and pushed: `feat: SF-style temple record detail, edit modal from list/detail, View links to detail page`
 
 - Replaced `Media` model with `ContentDocument` + `ContentVersion` to mirror Salesforce's ContentDocument/ContentVersion pattern
 - `ContentDocument`: title, templeId; parent file entity  
