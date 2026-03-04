@@ -13,7 +13,7 @@ CamArch is a Next.js 16 / Prisma / PostgreSQL (Supabase) platform for discoverin
 
 ---
 
-## Current Version: v1.3.0
+## Current Version: v1.4.0
 
 Full changelog: `camarch-wiki/Releases.md`
 
@@ -50,6 +50,10 @@ All pages require a valid JWT with `admin:access` permission.
 |-----|-----------|-------------|
 | `/admin` | `admin:access` | Dashboard |
 | `/admin/temples` | `temples:read` | Temple list + CRUD |
+| `/admin/temples/[id]` | `temples:read` | SF-style record detail — inline edit, related lists |
+| `/admin/temples/[id]/edit` | `temples:write` | Full-page edit (standalone, 2-col SF layout) |
+| `/admin/files` | `temples:read` | All files across all temples |
+| `/admin/content-documents/[id]` | `temples:read` | File detail + version history |
 | `/admin/users` | `users:manage` | Admin user management |
 | `/admin/roles` | `roles:manage` | SF PermissionSet-style roles editor |
 | `/admin/audit-logs` | `audit:read` | Immutable action log |
@@ -141,10 +145,59 @@ JWT_SECRET=         # Min 32 chars
 - [ ] Password change in user edit modal — currently replaces hash if a new password is provided; no "confirm password" field yet
 - [ ] Existing seeded temples have `status: DRAFT` — need to be published manually or via the approve endpoint
 - [ ] `MediaLightbox.tsx` in `src/components/ui/` may now be dead code — was used by the old media grid; can be removed if unused
+- [ ] `/admin/files` page currently loads all documents in one request — consider adding server-side pagination when file count grows
 
 ---
 
-## Last Session Summary (March 4, 2026 — Session 4)
+## Last Session Summary (March 4, 2026 — Session 5)
+
+### Navigation & UX pattern fixes
+- Sidebar: added **Files** nav item (`/admin/files`, `temples:read` permission, folder icon) between Temples and Administration group
+- Temple list page (`/admin/temples`):
+  - Temple name → links to record detail page `/admin/temples/[id]`
+  - "View" action → links to record detail page (was linking to public site)
+  - "Edit" action → opens `TempleEditModal` (popup modal, for quick inline edits from the list)
+
+### SF-style record detail page (`/admin/temples/[id]/page.tsx`)
+- **Inline editing**: clicking Edit in the header swaps the left column to the full `TempleForm` in place — no modal; header replaces Edit/Delete with Save/Cancel
+- **Layout follows SF conventions:**
+  - Left column (lg:2/3): Temple Details → Content → Record Info (at bottom of main body)
+  - Right column (lg:1/3): `FilesRelatedList` (top) → Gallery preview (below)
+- On save: re-fetches temple and returns to read-only view
+- Delete navigates to `/admin/temples` list
+
+### TempleEditModal (`src/components/admin/TempleEditModal.tsx`)
+- Used only from the list page "Edit" row action (not from the detail page)
+- Self-fetches full temple data on open; shows loading spinner until ready
+- Proper modal styling: `bg-black/40 backdrop-blur-[2px]` overlay, white sticky header, `bg-[#f3f3f3]` body so nested `TempleForm` white cards render cleanly
+- Fixed earlier broken style (was `bg-charcoal/5` body which clashed with card backgrounds)
+
+### File detail page (`/admin/content-documents/[id]/page.tsx`)
+- Server component; fetches ContentDocument with all versions + temple via Prisma
+- Breadcrumb: Dashboard / Temples / [temple] / Files / [doc title]
+- Version history table: v-badge (green = current), size, MIME, uploader, date, Download per row
+- File Info summary card at bottom (doc id, version count, current size, first uploaded)
+- Download Current button in header
+
+### Files admin list page (`/admin/files/page.tsx`)
+- Lists all ContentDocuments across all temples (no templeId filter)
+- Columns: thumbnail, file title + version badge + version count, temple (links to detail), MIME, size, uploader, relative time
+- Search filter by title or temple name
+- Hover actions: Download, View (→ file detail page), Delete
+- `FilesRelatedList` filename links updated: now navigate to `/admin/content-documents/${doc.id}` (removed inline version history expansion)
+
+### API changes
+- `GET /api/admin/content-documents` — `templeId` is now **optional**; omitting it returns all documents across all temples (includes `temple` relation in response)
+- Response shape now always includes `temple: { id, name, slug }` field
+
+### Commits
+- `feat: SF-style temple record detail, edit modal from list/detail, View links to detail page`
+- `feat: inline edit on record detail, files in right sidebar, record info in left column`
+- `feat: fix modal styling, add Files to sidebar nav, Files admin page`
+
+---
+
+## Previous Session Summary (March 4, 2026 — Session 4)
 
 - Added `onSuccess?: () => void` prop to `TempleForm` — when provided, called instead of `router.push("/admin/temples")`, enabling use inside a modal
 - Created `TempleEditModal.tsx` (`src/components/admin/TempleEditModal.tsx`):
