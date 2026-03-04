@@ -1,8 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+
+type TempleStatus = "DRAFT" | "PENDING_REVIEW" | "PUBLISHED" | "ARCHIVED";
+
+const STATUS_LABELS: Record<TempleStatus, string> = {
+  DRAFT: "Draft",
+  PENDING_REVIEW: "In Review",
+  PUBLISHED: "Published",
+  ARCHIVED: "Archived",
+};
+
+const STATUS_CLASSES: Record<TempleStatus, string> = {
+  DRAFT: "bg-charcoal/8 text-charcoal/60",
+  PENDING_REVIEW: "bg-gold/15 text-amber-700",
+  PUBLISHED: "bg-jungle/10 text-jungle",
+  ARCHIVED: "bg-charcoal/8 text-charcoal/35",
+};
 
 interface AdminTemple {
   id: number;
@@ -11,6 +27,7 @@ interface AdminTemple {
   featuredImage: string;
   yearBuilt: number | null;
   religion: string | null;
+  status: TempleStatus;
   province: { name: string };
   era: { name: string } | null;
   style: { name: string } | null;
@@ -20,6 +37,10 @@ export default function AdminTemplesPage() {
   const [temples, setTemples] = useState<AdminTemple[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [approving, setApproving] = useState<number | null>(null);
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchTemples = () => {
     setLoading(true);
@@ -45,18 +66,97 @@ export default function AdminTemplesPage() {
     }
   };
 
+  const handleApprove = async (id: number, status: TempleStatus) => {
+    setApproving(id);
+    try {
+      const res = await fetch(`/api/admin/temples/${id}/approve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        alert(d.error ?? "Failed to update status");
+        return;
+      }
+      const { data } = await res.json();
+      setTemples((prev) => prev.map((t) => (t.id === id ? { ...t, status: data.status } : t)));
+    } catch {
+      alert("Failed to update status.");
+    } finally {
+      setApproving(null);
+    }
+  };
+
+  const handleImport = async (file: File) => {
+    setImporting(true);
+    setImportResult(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/admin/temples/import", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) {
+        setImportResult(`Error: ${data.error ?? "Import failed"}`);
+        return;
+      }
+      setImportResult(`Imported ${data.data.imported} temples successfully.`);
+      fetchTemples();
+    } catch {
+      setImportResult("Network error during import.");
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleExport = (format: "csv" | "geojson") => {
+    window.open(`/api/admin/temples/export?format=${format}`, "_blank");
+  };
+
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-heading text-2xl text-charcoal mb-1">Temples</h1>
           <p className="font-body text-sm text-charcoal/50">{temples.length} total</p>
         </div>
-        <Link href="/admin/temples/new" className="btn-primary text-sm py-2 px-4">
-          + Add Temple
-        </Link>
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Import */}
+          <label className={`inline-flex items-center gap-1.5 cursor-pointer px-3 py-2 rounded-lg border border-charcoal/15 font-body text-sm text-charcoal/70 hover:bg-charcoal/4 transition-colors ${importing ? "opacity-50 pointer-events-none" : ""}`}>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            {importing ? "Importing…" : "Import CSV"}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".csv,text/csv"
+              className="hidden"
+              disabled={importing}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImport(f); e.target.value = ""; }}
+            />
+          </label>
+          {/* Export */}
+          <button onClick={() => handleExport("csv")} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-charcoal/15 font-body text-sm text-charcoal/70 hover:bg-charcoal/4 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+            CSV
+          </button>
+          <button onClick={() => handleExport("geojson")} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-charcoal/15 font-body text-sm text-charcoal/70 hover:bg-charcoal/4 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+            GeoJSON
+          </button>
+          <Link href="/admin/temples/new" className="btn-primary text-sm py-2 px-4">
+            + Add Temple
+          </Link>
+        </div>
       </div>
+
+      {/* Import result */}
+      {importResult && (
+        <div className={`font-body text-sm px-4 py-2.5 rounded-lg border ${importResult.startsWith("Error") ? "bg-red-50 border-red-200 text-red-700" : "bg-jungle/5 border-jungle/20 text-jungle"}`}>
+          {importResult}
+          <button onClick={() => setImportResult(null)} className="ml-3 text-charcoal/40 hover:text-charcoal">×</button>
+        </div>
+      )}
 
       {/* Table */}
       <div className="bg-white rounded-xl border border-charcoal/8 shadow-sm overflow-hidden">
@@ -78,6 +178,7 @@ export default function AdminTemplesPage() {
                   <th className="text-left px-5 py-3 font-body text-[10px] uppercase tracking-wider text-charcoal/40 hidden sm:table-cell">Province</th>
                   <th className="text-left px-5 py-3 font-body text-[10px] uppercase tracking-wider text-charcoal/40 hidden md:table-cell">Style</th>
                   <th className="text-left px-5 py-3 font-body text-[10px] uppercase tracking-wider text-charcoal/40 hidden lg:table-cell">Year</th>
+                  <th className="text-left px-5 py-3 font-body text-[10px] uppercase tracking-wider text-charcoal/40">Status</th>
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
@@ -111,7 +212,30 @@ export default function AdminTemplesPage() {
                       {temple.yearBuilt ?? <span className="text-charcoal/25">—</span>}
                     </td>
                     <td className="px-5 py-3">
+                      <span className={`inline-block font-body text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${STATUS_CLASSES[temple.status]}`}>
+                        {STATUS_LABELS[temple.status]}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                        {temple.status === "PENDING_REVIEW" && (
+                          <button
+                            onClick={() => handleApprove(temple.id, "PUBLISHED")}
+                            disabled={approving === temple.id}
+                            className="font-body text-xs text-jungle hover:underline px-2 py-1 rounded hover:bg-jungle/5 disabled:opacity-40"
+                          >
+                            Publish
+                          </button>
+                        )}
+                        {temple.status === "PUBLISHED" && (
+                          <button
+                            onClick={() => handleApprove(temple.id, "ARCHIVED")}
+                            disabled={approving === temple.id}
+                            className="font-body text-xs text-charcoal/40 hover:text-charcoal px-2 py-1 rounded hover:bg-charcoal/5 disabled:opacity-40"
+                          >
+                            Archive
+                          </button>
+                        )}
                         <Link
                           href={`/temples/${temple.slug}`}
                           target="_blank"

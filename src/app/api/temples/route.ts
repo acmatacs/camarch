@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     const where = {
+      status: "PUBLISHED" as const,
       ...(search && {
         OR: [
           { name: { contains: search, mode: "insensitive" as const } },

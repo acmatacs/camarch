@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { setAuditContext } from "@/lib/audit-context";
+import { checkPermission } from "@/lib/auth";
 
 const TempleSchema = z.object({
   name: z.string().min(1, "Name is required").max(200),
@@ -11,6 +12,7 @@ const TempleSchema = z.object({
   history: z.string().max(10000).optional().nullable(),
   featuredImage: z.string().url().optional().or(z.literal("")),
   galleryImages: z.array(z.string().url()).optional().default([]),
+  status: z.enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "ARCHIVED"]).optional().default("DRAFT"),
   latitude: z.coerce.number().min(-90).max(90),
   longitude: z.coerce.number().min(-180).max(180),
   yearBuilt: z.coerce.number().int().min(0).max(2100).optional().nullable(),
@@ -22,7 +24,9 @@ const TempleSchema = z.object({
 });
 
 // ─── GET all temples (admin — no pagination limit) ────────────────────────────
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const denied = await checkPermission(req, "temples:read");
+  if (denied) return denied;
   try {
     const temples = await prisma.temple.findMany({
       include: {
@@ -42,6 +46,8 @@ export async function GET() {
 
 // ─── POST create a new temple ─────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  const denied = await checkPermission(req, "temples:write");
+  if (denied) return denied;
   try {
     await setAuditContext(req);
     const body = await req.json();
@@ -57,7 +63,7 @@ export async function POST(req: NextRequest) {
       name, khmerName, slug, description, history,
       featuredImage, galleryImages,
       latitude, longitude, yearBuilt, religion,
-      provinceId, kingId, styleId, eraId,
+      provinceId, kingId, styleId, eraId, status,
     } = parsed.data;
 
     const temple = await prisma.temple.create({
@@ -77,6 +83,7 @@ export async function POST(req: NextRequest) {
         kingId: kingId ?? null,
         styleId: styleId ?? null,
         eraId: eraId ?? null,
+        status,
       },
     });
 

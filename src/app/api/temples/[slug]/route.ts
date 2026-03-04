@@ -18,13 +18,14 @@ export async function GET(
       },
     });
 
-    if (!temple) {
+    if (!temple || temple.status !== "PUBLISHED") {
       return NextResponse.json({ error: "Temple not found" }, { status: 404 });
     }
 
-    // Fetch nearby temples in same province (excluding self)
+    // Fetch nearby temples in same province (excluding self, published only)
     const nearby = await prisma.temple.findMany({
       where: {
+        status: "PUBLISHED" as const,
         provinceId: temple.provinceId,
         slug: { not: slug },
       },

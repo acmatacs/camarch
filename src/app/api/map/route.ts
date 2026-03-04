@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   try {
     const temples = await prisma.temple.findMany({
+      where: { status: "PUBLISHED" as const },
       select: {
         id: true,
         slug: true,

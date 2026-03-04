@@ -21,6 +21,18 @@ enum ActionType {
   EXPORT
 }
 
+enum TempleStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MediaAccessLevel {
+  PUBLIC
+  INTERNAL_ONLY
+}
+
 model AuditLog {
   id          String     @id @default(uuid())
   action      ActionType
@@ -130,7 +142,29 @@ model Temple {
   religion       String?
   featuredImage  String
   galleryImages  String[]
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  status         TempleStatus @default(DRAFT)
+  media          Media[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([status])
+}
+
+model Media {
+  id          Int              @id @default(autoincrement())
+  url         String
+  mimeType    String           @default("image/jpeg")
+  sizeBytes   Int?             // file size in bytes
+  version     Int              @default(1)
+  tags        String[]
+  accessLevel MediaAccessLevel @default(PUBLIC)
+  templeId    Int
+  temple      Temple           @relation(fields: [templeId], references: [id], onDelete: Cascade)
+  uploadedById Int?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([templeId])
+  @@index([accessLevel])
 }
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { setAuditContext } from "@/lib/audit-context";
+import { checkPermission } from "@/lib/auth";
 
 const TempleUpdateSchema = z.object({
   name: z.string().min(1).max(200),
@@ -11,6 +12,7 @@ const TempleUpdateSchema = z.object({
   history: z.string().max(10000).optional().nullable(),
   featuredImage: z.string().url().optional().or(z.literal("")),
   galleryImages: z.array(z.string().url()).optional().default([]),
+  status: z.enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "ARCHIVED"]).optional(),
   latitude: z.coerce.number().min(-90).max(90),
   longitude: z.coerce.number().min(-180).max(180),
   yearBuilt: z.coerce.number().int().min(0).max(2100).optional().nullable(),
@@ -24,7 +26,9 @@ const TempleUpdateSchema = z.object({
 type Params = { params: Promise<{ id: string }> };
 
 // ─── GET single temple ────────────────────────────────────────────────────────
-export async function GET(_req: NextRequest, { params }: Params) {
+export async function GET(req: NextRequest, { params }: Params) {
+  const denied = await checkPermission(req, "temples:read");
+  if (denied) return denied;
   try {
     const { id } = await params;
     const temple = await prisma.temple.findUnique({
@@ -34,6 +38,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
         era: true,
         style: true,
         king: true,
+        media: { orderBy: { createdAt: "asc" } },
       },
     });
     if (!temple) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -45,8 +50,8 @@ export async function GET(_req: NextRequest, { params }: Params) {
 }
 
 // ─── PUT update temple ────────────────────────────────────────────────────────
-export async function PUT(req: NextRequest, { params }: Params) {
-  try {
+export async function PUT(req: NextRequest, { params }: Params) {  const denied = await checkPermission(req, "temples:write");
+  if (denied) return denied;  try {
     await setAuditContext(req);
     const { id } = await params;
     const body = await req.json();
@@ -62,7 +67,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       name, khmerName, slug, description, history,
       featuredImage, galleryImages,
       latitude, longitude, yearBuilt, religion,
-      provinceId, kingId, styleId, eraId,
+      provinceId, kingId, styleId, eraId, status,
     } = parsed.data;
 
     const temple = await prisma.temple.update({
@@ -83,6 +88,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
         kingId: kingId ?? null,
         styleId: styleId ?? null,
         eraId: eraId ?? null,
+        ...(status && { status }),
       },
     });
 
@@ -95,8 +101,8 @@ export async function PUT(req: NextRequest, { params }: Params) {
 }
 
 // ─── DELETE temple ────────────────────────────────────────────────────────────
-export async function DELETE(req: NextRequest, { params }: Params) {
-  try {
+export async function DELETE(req: NextRequest, { params }: Params) {  const denied = await checkPermission(req, "temples:delete");
+  if (denied) return denied;  try {
     await setAuditContext(req);
     const { id } = await params;
     await prisma.temple.delete({ where: { id: parseInt(id) } });
