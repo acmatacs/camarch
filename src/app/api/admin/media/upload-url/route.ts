@@ -42,8 +42,9 @@ export async function POST(req: NextRequest) {
       .createSignedUploadUrl(storagePath);
 
     if (error || !data) {
-      console.error("[upload-url] Supabase error:", error);
-      return NextResponse.json({ error: "Failed to generate upload URL" }, { status: 500 });
+      const msg = error?.message ?? "Unknown Supabase Storage error";
+      console.error("[upload-url] Supabase error:", msg);
+      return NextResponse.json({ error: `Storage error: ${msg}` }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("[POST /api/admin/media/upload-url]", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    const msg = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
